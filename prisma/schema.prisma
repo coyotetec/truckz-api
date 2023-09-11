@@ -1,0 +1,172 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String      @id @default(uuid())
+  active       Boolean     @default(true)
+  email        String      @unique
+  username     String      @unique
+  password     String
+  avatarUrl    String?     @map("avatar_url")
+  createdAt    DateTime    @default(now()) @map("created_at")
+  contractorId String?
+  contractor   Contractor? @relation("user", fields: [contractorId], references: [id])
+  address      Address[]   @relation("user")
+  driver       Driver?     @relation("user")
+
+  @@map("user")
+}
+
+model Address {
+  id                  String  @id @default(uuid())
+  name                String
+  zipcode             String?
+  address             String
+  number              Int?
+  district            String
+  reference           String?
+  state               String
+  city                String
+  latitude            Decimal
+  longitude           Decimal
+  userId              String? @map("user_id")
+  user                User?   @relation("user", fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  pickupAddressLoad   Load[]  @relation("pickupAddress")
+  deliveryAddressLoad Load[]  @relation("deliveryAddress")
+
+  @@map("address")
+}
+
+model Contractor {
+  id                String  @id @default(uuid())
+  name              String
+  cnpj              String? @unique @db.VarChar(11)
+  cpf               String? @unique @db.VarChar(14)
+  stateRegistration String  @map("state_registration")
+  phoneNumber       String  @map("phone_number")
+  whatsappNumber    String  @map("whatsapp_number")
+  user              User[]  @relation("user")
+  load              Load[]  @relation("contractor")
+
+  @@map("contractor")
+}
+
+model Driver {
+  id             String    @id @default(uuid())
+  fullName       String    @map("full_name")
+  birthDate      DateTime  @map("birth_date") @db.Date
+  cpf            String    @unique @db.VarChar(11)
+  cnhNumber      String    @unique @map("cnh_number")
+  cnhCategory    String    @map("cnh_category")
+  rntrc          String    @unique
+  phoneNumber    String    @map("phone_number")
+  whatsappNumber String    @map("whatsapp_number")
+  user           User      @relation("user", fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId         String    @unique @map("user_id")
+  truck          Truck[]   @relation("driver")
+  checkin        Checkin[] @relation("driver")
+
+  @@map("driver")
+}
+
+model Truck {
+  id         String    @id @default(uuid())
+  active     Boolean   @default(true)
+  renavam    String
+  plate      String
+  crvNumber  String    @map("crv_number")
+  model      String
+  holderName String    @map("holder_name")
+  holderCpf  String?   @map("holder_cpf") @db.VarChar(11)
+  holderCnpj String?   @map("holder_cnpj") @db.VarChar(14)
+  type       TruckType
+  axlesQty   Int       @map("axles_qty")
+  tracker    Boolean
+  driver     Driver    @relation("driver", fields: [driverId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  driverId   String    @map("driver_id")
+
+  @@map("truck")
+}
+
+enum TruckType {
+  bau
+  bau_frigorifico
+  sider
+  cacamba
+  grade_baixa
+  graneleiro
+  prancha
+}
+
+model Checkin {
+  id        String   @id @default(uuid())
+  active    Boolean  @default(true)
+  latitude  Decimal
+  longitude Decimal
+  city      String
+  state     String
+  checkinAt DateTime @default(now()) @map("checkin_at")
+  driver    Driver   @relation("driver", fields: [driverId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  driverId  String   @map("driver_id")
+
+  @@map("checkin")
+}
+
+model Load {
+  id                String         @id @default(uuid())
+  title             String?
+  status            LoadStatus     @default(active)
+  price             Decimal
+  length            Decimal?
+  width             Decimal?
+  height            Decimal?
+  dimensionsUnit    DimensionUnit? @map("dimensions_unit")
+  weight            Decimal?
+  weightUnit        WeightUnit?    @map("weight_unit")
+  description       String?
+  pickupAddress     Address        @relation("pickupAddress", fields: [pickupAddressId], references: [id], onUpdate: Cascade, onDelete: Restrict)
+  pickupAddressId   String         @map("pickup_address_id")
+  pickupDate        DateTime       @map("pickup_date") @db.Date
+  deliveryAddress   Address        @relation("deliveryAddress", fields: [deliveryAddressId], references: [id], onUpdate: Cascade, onDelete: Restrict)
+  deliveryAddressId String         @map("delivery_address_id")
+  deliveryDate      DateTime       @map("delivery_date") @db.Date
+  createdAt         DateTime       @default(now()) @map("created_at")
+  loadImage         LoadImage[]    @relation("load")
+  seenTimes         Int            @default(0) @map("seen_times")
+  contractor        Contractor     @relation("contractor", fields: [contractorId], references: [id], onUpdate: Cascade, onDelete: Restrict)
+  contractorId      String         @map("contractor_id")
+
+  @@map("load")
+}
+
+enum LoadStatus {
+  active
+  cancelled
+  finished
+}
+
+enum DimensionUnit {
+  centimeters
+  meters
+}
+
+enum WeightUnit {
+  grams
+  kilograms
+  tons
+}
+
+model LoadImage {
+  id     String @id @default(uuid())
+  url    String
+  load   Load   @relation("load", fields: [loadId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  loadId String @map("load_id")
+
+  @@map("load_image")
+}
