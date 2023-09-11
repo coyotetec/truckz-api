@@ -15,7 +15,7 @@ model User {
   password     String
   avatarUrl    String?     @map("avatar_url")
   createdAt    DateTime    @default(now()) @map("created_at")
-  contractorId String?
+  contractorId String?     @map("contractor_id")
   contractor   Contractor? @relation("user", fields: [contractorId], references: [id])
   address      Address[]   @relation("user")
   driver       Driver?     @relation("user")
@@ -46,8 +46,8 @@ model Address {
 model Contractor {
   id                String  @id @default(uuid())
   name              String
-  cnpj              String? @unique @db.VarChar(11)
-  cpf               String? @unique @db.VarChar(14)
+  cnpj              String? @unique @db.VarChar(14)
+  cpf               String? @unique @db.VarChar(11)
   stateRegistration String  @map("state_registration")
   phoneNumber       String  @map("phone_number")
   whatsappNumber    String  @map("whatsapp_number")

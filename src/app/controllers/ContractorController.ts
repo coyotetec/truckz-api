@@ -17,7 +17,7 @@ class CompanyController {
   async username(req: Request, res: Response) {
     const { username } = req.params;
 
-    const isAvailable = checkUsernameAvailable(username);
+    const isAvailable = !!username;
 
     return res.json({ isAvailable });
   }

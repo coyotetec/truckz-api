@@ -19,7 +19,7 @@ CREATE TABLE "user" (
     "password" TEXT NOT NULL,
     "avatar_url" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "contractorId" TEXT,
+    "contractor_id" TEXT,
 
     CONSTRAINT "user_pkey" PRIMARY KEY ("id")
 );
@@ -46,8 +46,8 @@ CREATE TABLE "address" (
 CREATE TABLE "contractor" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
-    "cnpj" VARCHAR(11),
-    "cpf" VARCHAR(14),
+    "cnpj" VARCHAR(14),
+    "cpf" VARCHAR(11),
     "state_registration" TEXT NOT NULL,
     "phone_number" TEXT NOT NULL,
     "whatsapp_number" TEXT NOT NULL,
@@ -162,7 +162,7 @@ CREATE UNIQUE INDEX "driver_rntrc_key" ON "driver"("rntrc");
 CREATE UNIQUE INDEX "driver_user_id_key" ON "driver"("user_id");
 
 -- AddForeignKey
-ALTER TABLE "user" ADD CONSTRAINT "user_contractorId_fkey" FOREIGN KEY ("contractorId") REFERENCES "contractor"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "user" ADD CONSTRAINT "user_contractor_id_fkey" FOREIGN KEY ("contractor_id") REFERENCES "contractor"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "address" ADD CONSTRAINT "address_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
