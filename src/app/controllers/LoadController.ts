@@ -4,6 +4,7 @@ import { createLoad } from '../useCases/load/createLoad';
 import { findLoads } from '../useCases/load/findLoads';
 import { findLoadById } from '../useCases/load/findLoadById';
 import { closeLoad } from '../useCases/load/closeLoad';
+import { updateLoad } from '../useCases/load/updateLoad';
 
 class LoadController {
   async index(req: Request, res: Response) {
@@ -61,6 +62,18 @@ class LoadController {
 
     await closeLoad(id, status);
 
+    res.sendStatus(204);
+  }
+
+  async update(req: Request, res: Response) {
+    const { id: loadId } = req.params;
+    if (!req.userId) {
+      return res.sendStatus(404);
+    }
+
+    const dataUpdate = loadStoreSchema.parse(req.body);
+
+    await updateLoad(req.userId, loadId, dataUpdate);
     res.sendStatus(204);
   }
 }
