@@ -59,48 +59,50 @@ export const loadStoreSchema = z
         invalid_type_error: 'description must be a string',
       })
       .optional(),
-    pickupAddress: z.object({
-      zipcode: z
-        .string({
-          invalid_type_error: 'zipcode must be a string',
-        })
-        .optional(),
-      address: z.string({
-        required_error: 'pickupAddress.address is a required field',
-        invalid_type_error: 'pickupAddress.address must be a string',
-      }),
-      number: z
-        .number({
-          invalid_type_error: 'pickupAddress.number must be a number',
-        })
-        .optional(),
-      district: z.string({
-        required_error: 'pickupAddress.district is a required field',
-        invalid_type_error: 'pickupAddress.district must be a string',
-      }),
-      reference: z
-        .string({
-          invalid_type_error: 'pickupAddress.reference must be a string',
-        })
-        .optional(),
-      state: z.string({
-        required_error: 'pickupAddress.state is a required field',
-        invalid_type_error: 'pickupAddress.state must be a string',
-      }),
-      city: z.string({
-        required_error: 'pickupAddress.city is a required field',
-        invalid_type_error: 'pickupAddress.city must be a string',
-      }),
-      latitude: z.number({
-        required_error: 'pickupAddress.latitude is a required field',
-        invalid_type_error: 'pickupAddress.latitude must be a number',
-      }),
-      longitude: z.number({
-        required_error: 'pickupAddress.longitude is a required field',
-        invalid_type_error: 'pickupAddress.longitude must be a number',
-      }),
-    }),
-    pickupDate: z.date({
+    pickupAddress: z
+      .object({
+        zipcode: z
+          .string({
+            invalid_type_error: 'zipcode must be a string',
+          })
+          .optional(),
+        address: z.string({
+          required_error: 'pickupAddress.address is a required field',
+          invalid_type_error: 'pickupAddress.address must be a string',
+        }),
+        number: z
+          .number({
+            invalid_type_error: 'pickupAddress.number must be a number',
+          })
+          .optional(),
+        district: z.string({
+          required_error: 'pickupAddress.district is a required field',
+          invalid_type_error: 'pickupAddress.district must be a string',
+        }),
+        reference: z
+          .string({
+            invalid_type_error: 'pickupAddress.reference must be a string',
+          })
+          .optional(),
+        state: z.string({
+          required_error: 'pickupAddress.state is a required field',
+          invalid_type_error: 'pickupAddress.state must be a string',
+        }),
+        city: z.string({
+          required_error: 'pickupAddress.city is a required field',
+          invalid_type_error: 'pickupAddress.city must be a string',
+        }),
+        latitude: z.number({
+          required_error: 'pickupAddress.latitude is a required field',
+          invalid_type_error: 'pickupAddress.latitude must be a number',
+        }),
+        longitude: z.number({
+          required_error: 'pickupAddress.longitude is a required field',
+          invalid_type_error: 'pickupAddress.longitude must be a number',
+        }),
+      })
+      .optional(),
+    pickupDate: z.coerce.date({
       required_error: 'pickupDate is a required field',
       invalid_type_error: 'pickupDate must be a date',
     }),
@@ -155,7 +157,7 @@ export const loadStoreSchema = z
         }),
       })
       .optional(),
-    deliveryDate: z.date({
+    deliveryDate: z.coerce.date({
       required_error: 'deliveryDate is a required field',
       invalid_type_error: 'deliveryDate must be a date',
     }),
