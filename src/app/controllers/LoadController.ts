@@ -71,6 +71,18 @@ class LoadController {
       return res.sendStatus(404);
     }
 
+    if (typeof req.body?.pickupAddress === 'string') {
+      req.body.pickupAddress = JSON.parse(req.body.pickupAddress);
+    }
+
+    if (typeof req.body?.deliveryAddress === 'string') {
+      req.body.deliveryAddress = JSON.parse(req.body.deliveryAddress);
+    }
+
+    if (typeof req.body?.price === 'string') {
+      req.body.price = Number(req.body.price);
+    }
+
     const dataUpdate = loadStoreSchema.parse(req.body);
 
     await updateLoad(req.userId, loadId, dataUpdate);
