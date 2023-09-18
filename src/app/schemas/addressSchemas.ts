@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const AddressSchema = z.object({
+export const addressSchema = z.object({
   name: z.string({
     required_error: 'name is a required field',
   }),
