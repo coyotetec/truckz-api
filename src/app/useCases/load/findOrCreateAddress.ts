@@ -1,10 +1,10 @@
 import { z } from 'zod';
-import AddressRepository from '../app/repositories/AddressRepository';
-import { AddressSchema } from '../app/schemas/addressSchemas';
+import AddressRepository from '../../repositories/AddressRepository';
+import { addressSchema } from '../../schemas/addressSchemas';
 
-export async function createOrUpdateAddress(
+export async function findOrCreateAddress(
   addressId?: string,
-  addressData?: z.infer<typeof AddressSchema>,
+  addressData?: z.infer<typeof addressSchema>,
 ) {
   if (addressId) {
     return await AddressRepository.findById(addressId);

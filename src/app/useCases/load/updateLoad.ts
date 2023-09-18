@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { loadStoreSchema } from '../../schemas/loadSchemas';
 import { prisma } from '../../../libs/prisma';
 import { APPError } from '../../errors/APPError';
-import { createOrUpdateAddress } from '../../../utils/createOrUpdateAddress';
+import { findOrCreateAddress } from './findOrCreateAddress';
 
 export async function updateLoad(
   userId: string,
@@ -26,19 +26,19 @@ export async function updateLoad(
     throw new APPError('load does not exists');
   }
 
-  const deliveryAddress = await createOrUpdateAddress(
+  const deliveryAddress = await findOrCreateAddress(
     payload.deliveryAddressId,
     payload.deliveryAddress && {
-      name: 'Endereço Delivery',
       ...payload.deliveryAddress,
+      name: 'Endereço Delivery',
     },
   );
 
-  const pickupAddress = await createOrUpdateAddress(
+  const pickupAddress = await findOrCreateAddress(
     payload.pickupAddressId,
     payload.pickupAddress && {
-      name: 'Endereço Pickup',
       ...payload.pickupAddress,
+      name: 'Endereço Pickup',
     },
   );
 
