@@ -7,10 +7,6 @@ import jwt from 'jsonwebtoken';
 
 export async function makeLogin(data: z.infer<typeof loginSchema>) {
   const user = await UserRepository.findFirst({
-    include: {
-      driver: true,
-      contractor: true,
-    },
     where: {
       OR: [
         {
@@ -40,13 +36,30 @@ export async function makeLogin(data: z.infer<typeof loginSchema>) {
     throw new APPError('incorrect password');
   }
 
+  const accountType = user.driver
+    ? 'driver'
+    : user.contractor
+    ? 'contractor'
+    : 'undefined';
   const secret = process.env.JWT_SECRET as string;
   const token = jwt.sign(
     {
       id: user.id,
+      accountType,
     },
     secret,
   );
 
-  return token;
+  return {
+    token,
+    type: accountType,
+    user: {
+      avatarUrl: `https://s3.amazonaws.com/truckz-test/${user.avatarUrl}`,
+      ...(accountType === 'contractor' && {
+        contractor: {
+          name: user.contractor?.name,
+        },
+      }),
+    },
+  };
 }

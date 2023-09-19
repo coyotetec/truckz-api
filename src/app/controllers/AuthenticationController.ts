@@ -6,9 +6,9 @@ class AuthenticationController {
   async index(req: Request, res: Response) {
     const data = loginSchema.parse(req.body);
 
-    const token = await makeLogin(data);
+    const response = await makeLogin(data);
 
-    return res.json({ token });
+    return res.json(response);
   }
 }
 
