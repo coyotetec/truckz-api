@@ -1,12 +1,26 @@
 import { Load, Prisma } from '@prisma/client';
 import { prisma } from '../../libs/prisma';
 
+interface IFindAllArgs {
+  where: Prisma.LoadWhereInput;
+}
+
 interface IFindUniqueArgs {
   where: Prisma.LoadWhereUniqueInput;
 }
 
 class LoadRepository {
-  async findAll(data: { latitude: number; longitude: number; radius: number }) {
+  async findAll({ where }: IFindAllArgs) {
+    return prisma.load.findMany({
+      where,
+    });
+  }
+
+  async findClose(data: {
+    latitude: number;
+    longitude: number;
+    radius: number;
+  }) {
     return prisma.$queryRaw<Load[]>`
       SELECT *
       FROM load l

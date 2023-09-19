@@ -8,11 +8,11 @@ import { updateLoad } from '../useCases/load/updateLoad';
 
 class LoadController {
   async index(req: Request, res: Response) {
-    if (!req.userId) {
+    if (!req.userId || !req.accountType) {
       return res.sendStatus(404);
     }
 
-    const loads = await findLoads(req.userId);
+    const loads = await findLoads(req.userId, req.accountType);
 
     res.json(loads);
   }

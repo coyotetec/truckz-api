@@ -3,14 +3,16 @@ import { prisma } from '../../libs/prisma';
 
 interface IFindFirstArgs {
   where: Prisma.UserWhereInput;
-  include?: Prisma.UserInclude;
 }
 
 class UserRepository {
-  async findFirst({ where, include }: IFindFirstArgs) {
+  async findFirst({ where }: IFindFirstArgs) {
     return prisma.user.findFirst({
       where,
-      include,
+      include: {
+        driver: true,
+        contractor: true,
+      },
     });
   }
 }
