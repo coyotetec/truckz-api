@@ -1,10 +1,10 @@
 import { z } from 'zod';
 import { loadStoreSchema } from '../../schemas/loadSchemas';
-import AddressRepository from '../../repositories/AddressRepository';
 import { uploadImage } from '../../../utils/uploadImage';
 import LoadRepository from '../../repositories/LoadRepository';
 import { APPError } from '../../errors/APPError';
 import ContractorRepository from '../../repositories/ContractorRepository';
+import { findOrCreateAddress } from './findOrCreateAddress';
 
 export async function createLoad(
   payload: z.infer<typeof loadStoreSchema>,
@@ -25,38 +25,20 @@ export async function createLoad(
     throw new APPError('contractor does not exists');
   }
 
-  const deliveryAddress = payload.deliveryAddressId
-    ? await AddressRepository.findById(payload.deliveryAddressId)
-    : payload.deliveryAddress
-    ? await AddressRepository.create({
-        name: 'Endereço Delivery',
-        zipcode: payload.deliveryAddress.zipcode,
-        address: payload.deliveryAddress.address,
-        number: payload.deliveryAddress.number,
-        district: payload.deliveryAddress.district,
-        reference: payload.deliveryAddress.reference,
-        state: payload.deliveryAddress.state,
-        city: payload.deliveryAddress.city,
-        latitude: payload.deliveryAddress.latitude,
-        longitude: payload.deliveryAddress.longitude,
-      })
-    : null;
-  const pickupAddress = payload.pickupAddressId
-    ? await AddressRepository.findById(payload.pickupAddressId)
-    : payload.pickupAddress
-    ? await AddressRepository.create({
-        name: 'Endereço Pickup',
-        zipcode: payload.pickupAddress.zipcode,
-        address: payload.pickupAddress.address,
-        number: payload.pickupAddress.number,
-        district: payload.pickupAddress.district,
-        reference: payload.pickupAddress.reference,
-        state: payload.pickupAddress.state,
-        city: payload.pickupAddress.city,
-        latitude: payload.pickupAddress.latitude,
-        longitude: payload.pickupAddress.longitude,
-      })
-    : null;
+  const deliveryAddress = await findOrCreateAddress(
+    payload.deliveryAddressId,
+    payload.deliveryAddress && {
+      ...payload.deliveryAddress,
+      name: 'Endereço Delivery',
+    },
+  );
+  const pickupAddress = await findOrCreateAddress(
+    payload.pickupAddressId,
+    payload.pickupAddress && {
+      ...payload.pickupAddress,
+      name: 'Endereço Pickup',
+    },
+  );
 
   if (!deliveryAddress) {
     throw new APPError(
@@ -70,13 +52,15 @@ export async function createLoad(
     );
   }
 
-  const loadFilesName = await Promise.all(
-    images.map((image) =>
-      uploadImage(image, {
-        height: 320,
-      }),
-    ),
-  );
+  const loadFilesName = images
+    ? await Promise.all(
+        images.map((image) =>
+          uploadImage(image, {
+            height: 320,
+          }),
+        ),
+      )
+    : [];
 
   const load = await LoadRepository.create({
     contractorId: contractor.id,
