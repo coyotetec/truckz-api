@@ -42,6 +42,22 @@ class LoadController {
       req.body.price = Number(req.body.price);
     }
 
+    if (typeof req.body?.length === 'string') {
+      req.body.length = Number(req.body.length);
+    }
+
+    if (typeof req.body?.height === 'string') {
+      req.body.height = Number(req.body.height);
+    }
+
+    if (typeof req.body?.width === 'string') {
+      req.body.width = Number(req.body.width);
+    }
+
+    if (typeof req.body?.weight === 'string') {
+      req.body.weight = Number(req.body.weight);
+    }
+
     const data = loadStoreSchema.parse(req.body);
     const load = await createLoad(
       data,
@@ -83,10 +99,31 @@ class LoadController {
       req.body.price = Number(req.body.price);
     }
 
+    if (typeof req.body?.length === 'string') {
+      req.body.length = Number(req.body.length);
+    }
+
+    if (typeof req.body?.height === 'string') {
+      req.body.height = Number(req.body.height);
+    }
+
+    if (typeof req.body?.width === 'string') {
+      req.body.width = Number(req.body.width);
+    }
+
+    if (typeof req.body?.weight === 'string') {
+      req.body.weight = Number(req.body.weight);
+    }
+
     const dataUpdate = loadStoreSchema.parse(req.body);
 
-    await updateLoad(req.userId, loadId, dataUpdate);
-    res.sendStatus(204);
+    const loadUpdated = await updateLoad(
+      req.userId,
+      loadId,
+      dataUpdate,
+      req.files as Express.Multer.File[],
+    );
+    res.status(201).json(loadUpdated);
   }
 }
 

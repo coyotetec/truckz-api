@@ -1,15 +1,21 @@
 import { z } from 'zod';
 import { loadStoreSchema } from '../../schemas/loadSchemas';
-import { prisma } from '../../../libs/prisma';
 import { APPError } from '../../errors/APPError';
 import { findOrCreateAddress } from './findOrCreateAddress';
+import { evaluatesDeletedImages } from '../../../utils/evaluatesDeletedImages';
+import { evaluatesNewImages } from '../../../utils/evaluatesNewImages';
+import { deleteImage } from '../../../utils/deleteImage';
+import { uploadImage } from '../../../utils/uploadImage';
+import LoadRepository from '../../repositories/LoadRepository';
+import LoadImageRepository from '../../repositories/LoadImageRepository';
 
 export async function updateLoad(
   userId: string,
   loadId: string,
   payload: z.infer<typeof loadStoreSchema>,
+  images: Express.Multer.File[],
 ) {
-  const load = await prisma.load.findFirst({
+  const load = await LoadRepository.findFirst({
     where: {
       id: loadId,
       contractor: {
@@ -25,6 +31,55 @@ export async function updateLoad(
   if (!load) {
     throw new APPError('load does not exists');
   }
+
+  const imagesDB = await LoadImageRepository.findMany({
+    where: {
+      loadId,
+    },
+  });
+
+  const urlImagesDbSet = new Set(imagesDB.map(({ url }) => url));
+  console.log('Set de URLs da imagens no DB:', urlImagesDbSet);
+  const newImages = evaluatesNewImages(urlImagesDbSet, images);
+
+  const namesImagesMulterSet = new Set(
+    images.map(({ originalname }) => {
+      const formatName = originalname.split('.');
+      return formatName[0];
+    }),
+  );
+  console.log('Set de nomes das imagens recebidas:', namesImagesMulterSet);
+  const imagesNameDeleted = evaluatesDeletedImages(
+    namesImagesMulterSet,
+    imagesDB,
+  );
+
+  imagesNameDeleted &&
+    (await Promise.all(
+      imagesNameDeleted.map((nameImage) => deleteImage(nameImage)),
+    ));
+
+  const deletedImages = await LoadImageRepository.deleteMany({
+    where: {
+      url: {
+        in: imagesNameDeleted,
+      },
+    },
+  });
+
+  const newLoadImages = newImages
+    ? await Promise.all(
+        newImages.map((image) =>
+          uploadImage(image, {
+            height: 320,
+          }),
+        ),
+      )
+    : [];
+
+  console.log('Array com novas imagens:', newImages);
+  console.log('Array com nome das imagens Deletadas:', imagesNameDeleted);
+  console.log('imagens deletadas?', deletedImages);
 
   const deliveryAddress = await findOrCreateAddress(
     payload.deliveryAddressId,
@@ -54,7 +109,7 @@ export async function updateLoad(
     );
   }
 
-  const updateLoad = await prisma.load.update({
+  const updateLoad = await LoadRepository.update({
     where: {
       id: loadId,
     },
@@ -73,6 +128,11 @@ export async function updateLoad(
       pickupDate: payload.pickupDate,
       deliveryAddressId: deliveryAddress.id,
       deliveryDate: payload.deliveryDate,
+      loadImage: {
+        createMany: {
+          data: newLoadImages.map((url) => ({ url })),
+        },
+      },
     },
   });
 
