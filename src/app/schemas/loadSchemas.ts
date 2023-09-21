@@ -24,12 +24,12 @@ export const loadStoreSchema = z
       .optional(),
     width: z
       .number({
-        invalid_type_error: 'length must be a number',
+        invalid_type_error: 'width must be a number',
       })
       .optional(),
     height: z
       .number({
-        invalid_type_error: 'length must be a number',
+        invalid_type_error: 'height must be a number',
       })
       .optional(),
     dimensionsUnit: z
@@ -39,7 +39,7 @@ export const loadStoreSchema = z
       .optional(),
     weight: z
       .number({
-        invalid_type_error: 'length must be a number',
+        invalid_type_error: 'weight must be a number',
       })
       .optional(),
     weightUnit: z
