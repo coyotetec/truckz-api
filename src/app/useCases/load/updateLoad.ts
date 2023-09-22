@@ -39,7 +39,7 @@ export async function updateLoad(
   });
 
   const urlImagesDbSet = new Set(imagesDB.map(({ url }) => url));
-  console.log('Set de URLs da imagens no DB:', urlImagesDbSet);
+
   const newImages = evaluatesNewImages(urlImagesDbSet, images);
 
   const namesImagesMulterSet = new Set(
@@ -48,7 +48,7 @@ export async function updateLoad(
       return formatName[0];
     }),
   );
-  console.log('Set de nomes das imagens recebidas:', namesImagesMulterSet);
+
   const imagesNameDeleted = evaluatesDeletedImages(
     namesImagesMulterSet,
     imagesDB,
@@ -76,10 +76,6 @@ export async function updateLoad(
         ),
       )
     : [];
-
-  console.log('Array com novas imagens:', newImages);
-  console.log('Array com nome das imagens Deletadas:', imagesNameDeleted);
-  console.log('imagens deletadas?', deletedImages);
 
   const deliveryAddress = await findOrCreateAddress(
     payload.deliveryAddressId,
