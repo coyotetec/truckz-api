@@ -9,6 +9,15 @@ interface IFindUniqueArgs {
   where: Prisma.LoadWhereUniqueInput;
 }
 
+interface IFindFirstArgs {
+  where: Prisma.LoadWhereInput;
+}
+
+interface IUpdateArgs {
+  where: Prisma.LoadWhereUniqueInput;
+  data: Prisma.XOR<Prisma.LoadUpdateInput, Prisma.LoadUncheckedUpdateInput>;
+}
+
 class LoadRepository {
   async findAll({ where }: IFindAllArgs) {
     return prisma.load.findMany({
@@ -47,10 +56,23 @@ class LoadRepository {
     });
   }
 
+  async findFirst({ where }: IFindFirstArgs) {
+    return prisma.load.findFirst({
+      where,
+    });
+  }
+
   async create(
     data: Prisma.XOR<Prisma.LoadCreateInput, Prisma.LoadUncheckedCreateInput>,
   ) {
     return prisma.load.create({
+      data,
+    });
+  }
+
+  async update({ where, data }: IUpdateArgs) {
+    return prisma.load.update({
+      where,
       data,
     });
   }

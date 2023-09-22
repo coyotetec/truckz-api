@@ -39,6 +39,11 @@ router.post(
   LoadController.store,
 );
 router.delete('/loads/:id', authentication, LoadController.close);
-router.put('/loads/:id', authentication, LoadController.update);
+router.put(
+  '/loads/:id',
+  authentication,
+  upload.array('images'),
+  LoadController.update,
+);
 
 router.post('/authenticate/login', AuthenticationController.index);
