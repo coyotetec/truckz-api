@@ -59,7 +59,7 @@ export async function updateLoad(
       imagesNameDeleted.map((nameImage) => deleteImage(nameImage)),
     ));
 
-  const deletedImages = await LoadImageRepository.deleteMany({
+  await LoadImageRepository.deleteMany({
     where: {
       url: {
         in: imagesNameDeleted,
