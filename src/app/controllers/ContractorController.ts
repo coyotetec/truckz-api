@@ -13,14 +13,6 @@ class CompanyController {
 
     return res.status(201).json(contractor);
   }
-
-  async username(req: Request, res: Response) {
-    const { username } = req.params;
-
-    const isAvailable = !!username;
-
-    return res.json({ isAvailable });
-  }
 }
 
 export default new CompanyController();
