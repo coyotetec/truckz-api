@@ -29,6 +29,7 @@ router.get('/checkins', CheckinController.index);
 router.post('/checkins', authentication, CheckinController.store);
 
 router.get('/addresses', authentication, AddressController.index);
+router.get('/addresses/:id', authentication, AddressController.show);
 router.post('/addresses', authentication, AddressController.store);
 
 router.get('/loads', authentication, LoadController.index);
