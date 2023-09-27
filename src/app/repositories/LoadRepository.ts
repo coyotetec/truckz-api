@@ -3,6 +3,9 @@ import { prisma } from '../../libs/prisma';
 
 interface IFindAllArgs {
   where: Prisma.LoadWhereInput;
+  orderBy?:
+    | Prisma.LoadOrderByWithRelationInput
+    | Prisma.LoadOrderByWithRelationInput[];
 }
 
 interface IFindUniqueArgs {
@@ -19,9 +22,15 @@ interface IUpdateArgs {
 }
 
 class LoadRepository {
-  async findAll({ where }: IFindAllArgs) {
+  async findAll({ where, orderBy }: IFindAllArgs) {
     return prisma.load.findMany({
       where,
+      include: {
+        pickupAddress: true,
+        deliveryAddress: true,
+        loadImage: true,
+      },
+      orderBy,
     });
   }
 
