@@ -76,7 +76,7 @@ class LoadController {
 
     const status = loadCloseStatus.parse(req.body.status);
 
-    await closeLoad(id, status);
+    await closeLoad(id, status, req.userId);
 
     res.sendStatus(204);
   }
