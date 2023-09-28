@@ -9,6 +9,7 @@ import AddressController from './app/controllers/AddressController';
 
 import { upload } from './libs/multer';
 import { authentication } from './app/middlewares/authentication';
+import UserController from './app/controllers/UserController';
 
 export const router = Router();
 
@@ -21,7 +22,7 @@ router.post(
   upload.single('avatar'),
   ContractorController.store,
 );
-router.get('/contractors/:username/available', ContractorController.username);
+router.get('/user/:username/available', UserController.username);
 
 router.post('/drivers', DriverController.store);
 
