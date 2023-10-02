@@ -3,6 +3,7 @@ import { findAddresses } from '../useCases/address/findAddresses';
 import { addressSchema } from '../schemas/addressSchemas';
 import { createAddress } from '../useCases/address/createAddress';
 import { findAddressById } from '../useCases/address/findAddressById';
+import { updateAddress } from '../useCases/address/updateAddress';
 
 class AddressController {
   async index(req: Request, res: Response) {
@@ -32,6 +33,23 @@ class AddressController {
     const address = await createAddress(data, req.userId);
 
     res.status(201).json(address);
+  }
+
+  async update(req: Request, res: Response) {
+    const { userId } = req;
+    const { id } = req.params;
+
+    if (!userId) {
+      return res.sendStatus(404);
+    }
+    const addressData = addressSchema.parse(req.body);
+
+    const addressUpdated = await updateAddress({
+      addressId: id,
+      addressData,
+    });
+
+    res.status(204).json(addressUpdated);
   }
 }
 
