@@ -5,6 +5,10 @@ interface IFindAllArgs {
   where?: Prisma.AddressWhereInput;
 }
 
+interface IFindUniqueArgs {
+  where: Prisma.AddressWhereUniqueInput;
+}
+
 interface IUpdateArgs {
   where: Prisma.AddressWhereUniqueInput;
   data: Prisma.XOR<
@@ -16,6 +20,12 @@ interface IUpdateArgs {
 class AddressRepository {
   async findAll({ where }: IFindAllArgs) {
     return prisma.address.findMany({
+      where,
+    });
+  }
+
+  async findUnique({ where }: IFindUniqueArgs) {
+    return prisma.address.findUnique({
       where,
     });
   }
