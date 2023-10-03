@@ -43,13 +43,14 @@ class AddressController {
       return res.sendStatus(404);
     }
     const addressData = addressSchema.parse(req.body);
-
+    console.log(userId);
     const addressUpdated = await updateAddress({
       addressId: id,
       addressData,
+      userId,
     });
 
-    res.status(204).json(addressUpdated);
+    res.status(200).json(addressUpdated);
   }
 }
 

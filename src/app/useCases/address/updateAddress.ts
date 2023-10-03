@@ -1,10 +1,10 @@
 import { z } from 'zod';
 import { addressSchema } from '../../schemas/addressSchemas';
 import AddressRepository from '../../repositories/AddressRepository';
-import { prisma } from '../../../libs/prisma';
 import { APPError } from '../../errors/APPError';
 
 interface IUpdateAddressArgs {
+  userId: string;
   addressId: string;
   addressData: z.infer<typeof addressSchema>;
 }
@@ -12,10 +12,14 @@ interface IUpdateAddressArgs {
 export async function updateAddress({
   addressId,
   addressData,
+  userId,
 }: IUpdateAddressArgs) {
-  const address = await prisma.address.findUnique({
+  const address = await AddressRepository.findUnique({
     where: {
       id: addressId,
+      user: {
+        id: userId,
+      },
     },
   });
 

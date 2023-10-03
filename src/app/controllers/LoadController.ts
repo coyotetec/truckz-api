@@ -123,7 +123,7 @@ class LoadController {
       dataUpdate,
       req.files as Express.Multer.File[],
     );
-    res.status(201).json(loadUpdated);
+    res.status(200).json(loadUpdated);
   }
 }
 
