@@ -15,6 +15,7 @@ export async function updateLoad(
   payload: z.infer<typeof loadStoreSchema>,
   images: Express.Multer.File[],
 ) {
+  console.log(payload);
   const load = await LoadRepository.findFirst({
     where: {
       id: loadId,
@@ -40,14 +41,16 @@ export async function updateLoad(
 
   const urlImagesDbSet = new Set(imagesDB.map(({ url }) => url));
 
-  const newImages = evaluatesNewImages(urlImagesDbSet, images);
+  const newImages = images && evaluatesNewImages(urlImagesDbSet, images);
 
-  const namesImagesMulterSet = new Set(
-    images.map(({ originalname }) => {
-      const formatName = originalname.split('.');
-      return formatName[0];
-    }),
-  );
+  const namesImagesMulterSet =
+    images &&
+    new Set(
+      images.map(({ originalname }) => {
+        const formatName = originalname.split('.');
+        return formatName[0];
+      }),
+    );
 
   const imagesNameDeleted = evaluatesDeletedImages(
     namesImagesMulterSet,
@@ -112,6 +115,7 @@ export async function updateLoad(
     data: {
       contractorId: load.contractorId,
       title: payload.title,
+      type: payload.type,
       price: payload.price,
       length: payload.length,
       width: payload.width,

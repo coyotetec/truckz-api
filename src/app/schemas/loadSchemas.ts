@@ -13,6 +13,10 @@ export const loadStoreSchema = z
         invalid_type_error: 'title must be a string',
       })
       .optional(),
+    type: z.enum(['full', 'complement', 'full_complement'], {
+      invalid_type_error: 'type must be: full, complement, full_complement',
+      required_error: 'type is a required field',
+    }),
     price: z.number({
       required_error: 'price is a required field',
       invalid_type_error: 'price must be a number',

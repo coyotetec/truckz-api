@@ -65,6 +65,7 @@ export async function createLoad(
   const load = await LoadRepository.create({
     contractorId: contractor.id,
     title: payload.title,
+    type: payload.type,
     price: payload.price,
     length: payload.length,
     width: payload.width,
