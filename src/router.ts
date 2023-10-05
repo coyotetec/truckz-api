@@ -22,6 +22,8 @@ router.post(
   upload.single('avatar'),
   ContractorController.store,
 );
+router.put('/contractors', authentication, ContractorController.update);
+
 router.get('/user/:username/available', UserController.username);
 
 router.post('/drivers', DriverController.store);
