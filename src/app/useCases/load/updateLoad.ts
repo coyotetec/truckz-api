@@ -15,7 +15,6 @@ export async function updateLoad(
   payload: z.infer<typeof loadStoreSchema>,
   images: Express.Multer.File[],
 ) {
-  console.log(payload);
   const load = await LoadRepository.findFirst({
     where: {
       id: loadId,
