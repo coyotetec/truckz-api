@@ -5,6 +5,14 @@ interface IFindFirstArgs {
   where: Prisma.ContractorWhereInput;
 }
 
+interface IUpdateArgs {
+  where: Prisma.ContractorWhereUniqueInput;
+  data: Prisma.XOR<
+    Prisma.ContractorCreateInput,
+    Prisma.ContractorUncheckedCreateInput
+  >;
+}
+
 class ContractorRepository {
   async create(
     data: Prisma.XOR<
@@ -20,6 +28,13 @@ class ContractorRepository {
   async findFirst({ where }: IFindFirstArgs) {
     return prisma.contractor.findFirst({
       where,
+    });
+  }
+
+  async update({ data, where }: IUpdateArgs) {
+    return prisma.contractor.update({
+      where,
+      data,
     });
   }
 }

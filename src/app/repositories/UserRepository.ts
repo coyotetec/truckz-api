@@ -7,6 +7,7 @@ interface IFindFirstArgs {
 
 interface IFindUniqueArgs {
   where: Prisma.UserWhereUniqueInput;
+  select?: Prisma.UserSelect;
   include?: Prisma.UserInclude;
 }
 
@@ -25,6 +26,13 @@ class UserRepository {
     return prisma.user.findUnique({
       where,
       include,
+    });
+  }
+
+  async findUniqueContractorId({ where, select }: IFindUniqueArgs) {
+    return prisma.user.findUnique({
+      where,
+      select,
     });
   }
 }
