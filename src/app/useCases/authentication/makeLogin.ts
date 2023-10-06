@@ -4,6 +4,25 @@ import { APPError } from '../../errors/APPError';
 import { validatePassword } from '../../../utils/validatePassword';
 import UserRepository from '../../repositories/UserRepository';
 import jwt from 'jsonwebtoken';
+import CheckinRepository from '../../repositories/CheckinRepository';
+
+interface ContractorResponse {
+  name: string;
+}
+
+interface DriverResponse {
+  name: string;
+  lastCheckin?: {
+    id: string;
+    active: boolean;
+    latitude: number;
+    longitude: number;
+    city: string;
+    state: string;
+    checkinAt: Date;
+    driverId: string;
+  };
+}
 
 export async function makeLogin(data: z.infer<typeof loginSchema>) {
   const user = await UserRepository.findFirst({
@@ -50,15 +69,42 @@ export async function makeLogin(data: z.infer<typeof loginSchema>) {
     secret,
   );
 
+  const contractor: ContractorResponse = {
+    name: user.contractor?.name || '',
+  };
+  const driver: DriverResponse = {
+    name: user.driver?.fullName || '',
+  };
+
+  if (accountType === 'driver') {
+    const lastCheckin = await CheckinRepository.findFirst({
+      where: {
+        active: true,
+        driverId: user.driver?.id,
+      },
+    });
+
+    if (lastCheckin) {
+      driver.lastCheckin = {
+        ...lastCheckin,
+        latitude: lastCheckin.latitude.toNumber(),
+        longitude: lastCheckin.longitude.toNumber(),
+      };
+    }
+  }
+
   return {
     token,
     type: accountType,
     user: {
-      avatarUrl: `https://s3.amazonaws.com/truckz-test/${user.avatarUrl}`,
+      ...(user.avatarUrl && {
+        avatarUrl: `https://s3.amazonaws.com/truckz-test/${user.avatarUrl}`,
+      }),
       ...(accountType === 'contractor' && {
-        contractor: {
-          name: user.contractor?.name,
-        },
+        contractor,
+      }),
+      ...(accountType === 'driver' && {
+        driver,
       }),
     },
   };
