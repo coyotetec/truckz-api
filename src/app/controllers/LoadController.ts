@@ -1,5 +1,9 @@
 import { Request, Response } from 'express';
-import { loadCloseStatus, loadStoreSchema } from '../schemas/loadSchemas';
+import {
+  loadCloseStatus,
+  loadIndexSchema,
+  loadStoreSchema,
+} from '../schemas/loadSchemas';
 import { createLoad } from '../useCases/load/createLoad';
 import { findLoads } from '../useCases/load/findLoads';
 import { findLoadById } from '../useCases/load/findLoadById';
@@ -8,11 +12,16 @@ import { updateLoad } from '../useCases/load/updateLoad';
 
 class LoadController {
   async index(req: Request, res: Response) {
+    const filters = loadIndexSchema.safeParse(req.query);
     if (!req.userId || !req.accountType) {
       return res.sendStatus(404);
     }
 
-    const loads = await findLoads(req.userId, req.accountType);
+    const loads = await findLoads(
+      req.userId,
+      req.accountType,
+      filters.success ? filters.data : undefined,
+    );
 
     res.json(loads);
   }

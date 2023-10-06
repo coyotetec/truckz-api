@@ -6,6 +6,21 @@ export const loadCloseStatus = z.enum(['cancelled', 'finished'], {
   invalid_type_error: 'status must be cancelled or finished',
 });
 
+export const loadIndexSchema = z.object({
+  originState: z.string().optional(),
+  originCity: z.string().optional(),
+  destinationState: z.string().optional(),
+  destinationCity: z.string().optional(),
+  radius: z
+    .string({
+      invalid_type_error: 'radius must be a number',
+    })
+    .optional()
+    .default('250')
+    .transform((v) => parseFloat(v)),
+  type: z.enum(['full', 'complement', 'full_complement']).optional(),
+});
+
 export const loadStoreSchema = z
   .object({
     title: z
