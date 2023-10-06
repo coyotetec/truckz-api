@@ -28,8 +28,9 @@ router.get('/user/:username/available', UserController.username);
 
 router.post('/drivers', DriverController.store);
 
-router.get('/checkins', CheckinController.index);
+router.get('/checkins', authentication, CheckinController.index);
 router.post('/checkins', authentication, CheckinController.store);
+router.patch('/checkins/disable', authentication, CheckinController.disable);
 
 router.get('/addresses', authentication, AddressController.index);
 router.put('/addresses/:id', authentication, AddressController.update);

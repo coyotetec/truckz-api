@@ -28,5 +28,11 @@ export async function makeCheckin(
     longitude: payload.longitude,
   });
 
-  return checkin;
+  const mappedCheckin = {
+    ...checkin,
+    latitude: checkin.latitude.toNumber(),
+    longitude: checkin.longitude.toNumber(),
+  };
+
+  return mappedCheckin;
 }
