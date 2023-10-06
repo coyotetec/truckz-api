@@ -27,17 +27,11 @@ export async function createLoad(
 
   const deliveryAddress = await findOrCreateAddress(
     payload.deliveryAddressId,
-    payload.deliveryAddress && {
-      ...payload.deliveryAddress,
-      name: 'Endereço Delivery',
-    },
+    payload.deliveryAddress && payload.deliveryAddress,
   );
   const pickupAddress = await findOrCreateAddress(
     payload.pickupAddressId,
-    payload.pickupAddress && {
-      ...payload.pickupAddress,
-      name: 'Endereço Pickup',
-    },
+    payload.pickupAddress && payload.pickupAddress,
   );
 
   if (!deliveryAddress) {
