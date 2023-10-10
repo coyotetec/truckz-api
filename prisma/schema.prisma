@@ -121,6 +121,7 @@ model Checkin {
 model Load {
   id                String         @id @default(uuid())
   title             String?
+  type              LoadType       @default(full)
   status            LoadStatus     @default(active)
   price             Decimal
   length            Decimal?
@@ -143,6 +144,12 @@ model Load {
   contractorId      String         @map("contractor_id")
 
   @@map("load")
+}
+
+enum LoadType {
+  full
+  complement
+  full_complement
 }
 
 enum LoadStatus {

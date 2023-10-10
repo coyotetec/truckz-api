@@ -1,15 +1,21 @@
 import { z } from 'zod';
 import { loadStoreSchema } from '../../schemas/loadSchemas';
-import { prisma } from '../../../libs/prisma';
 import { APPError } from '../../errors/APPError';
-import { createOrUpdateAddress } from '../../../utils/createOrUpdateAddress';
+import { findOrCreateAddress } from './findOrCreateAddress';
+import { evaluatesDeletedImages } from '../../../utils/evaluatesDeletedImages';
+import { evaluatesNewImages } from '../../../utils/evaluatesNewImages';
+import { deleteImage } from '../../../utils/deleteImage';
+import { uploadImage } from '../../../utils/uploadImage';
+import LoadRepository from '../../repositories/LoadRepository';
+import LoadImageRepository from '../../repositories/LoadImageRepository';
 
 export async function updateLoad(
   userId: string,
   loadId: string,
   payload: z.infer<typeof loadStoreSchema>,
+  images: Express.Multer.File[],
 ) {
-  const load = await prisma.load.findFirst({
+  const load = await LoadRepository.findFirst({
     where: {
       id: loadId,
       contractor: {
@@ -26,19 +32,66 @@ export async function updateLoad(
     throw new APPError('load does not exists');
   }
 
-  const deliveryAddress = await createOrUpdateAddress(
+  const imagesDB = await LoadImageRepository.findMany({
+    where: {
+      loadId,
+    },
+  });
+
+  const urlImagesDbSet = new Set(imagesDB.map(({ url }) => url));
+
+  const newImages = images && evaluatesNewImages(urlImagesDbSet, images);
+
+  const namesImagesMulterSet =
+    images &&
+    new Set(
+      images.map(({ originalname }) => {
+        const formatName = originalname.split('.');
+        return formatName[0];
+      }),
+    );
+
+  const imagesNameDeleted = evaluatesDeletedImages(
+    namesImagesMulterSet,
+    imagesDB,
+  );
+
+  imagesNameDeleted &&
+    (await Promise.all(
+      imagesNameDeleted.map((nameImage) => deleteImage(nameImage)),
+    ));
+
+  await LoadImageRepository.deleteMany({
+    where: {
+      url: {
+        in: imagesNameDeleted,
+      },
+    },
+  });
+
+  const newLoadImages = newImages
+    ? await Promise.all(
+        newImages.map((image) =>
+          uploadImage(image, {
+            height: 320,
+          }),
+        ),
+      )
+    : [];
+
+  const deliveryAddress = await findOrCreateAddress(
     payload.deliveryAddressId,
     payload.deliveryAddress && {
-      name: 'Endereço Delivery',
       ...payload.deliveryAddress,
+      name: 'Endereço Delivery',
     },
   );
 
-  const pickupAddress = await createOrUpdateAddress(
+  const pickupAddress = await findOrCreateAddress(
     payload.pickupAddressId,
     payload.pickupAddress && {
-      name: 'Endereço Pickup',
       ...payload.pickupAddress,
+      name: 'Endereço Pickup',
     },
   );
 
@@ -54,13 +107,14 @@ export async function updateLoad(
     );
   }
 
-  const updateLoad = await prisma.load.update({
+  const updateLoad = await LoadRepository.update({
     where: {
       id: loadId,
     },
     data: {
       contractorId: load.contractorId,
       title: payload.title,
+      type: payload.type,
       price: payload.price,
       length: payload.length,
       width: payload.width,
@@ -73,6 +127,11 @@ export async function updateLoad(
       pickupDate: payload.pickupDate,
       deliveryAddressId: deliveryAddress.id,
       deliveryDate: payload.deliveryDate,
+      loadImage: {
+        createMany: {
+          data: newLoadImages.map((url) => ({ url })),
+        },
+      },
     },
   });
 

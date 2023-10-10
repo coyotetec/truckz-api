@@ -5,5 +5,19 @@ import CheckinRepository from '../../repositories/CheckinRepository';
 export async function findCheckins(data: z.infer<typeof checkinIndexSchema>) {
   const checkins = await CheckinRepository.findAll(data);
 
-  return checkins;
+  const mappedCheckins = checkins.map((checkin) => ({
+    id: checkin.id,
+    active: checkin.active,
+    latitude: checkin.latitude.toNumber(),
+    longitude: checkin.longitude.toNumber(),
+    city: checkin.city,
+    state: checkin.state,
+    checkinAt: checkin.checkin_at,
+    driverId: checkin.driver_id,
+    fullName: checkin.full_name,
+    phoneNumber: checkin.phone_number,
+    whatsappNumber: checkin.whatsapp_number,
+  }));
+
+  return mappedCheckins;
 }

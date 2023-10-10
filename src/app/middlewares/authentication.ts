@@ -23,9 +23,11 @@ export function authentication(
     const secret = process.env.JWT_SECRET as string;
     const decoded = jwt.verify(token, secret) as {
       id: string;
+      accountType: 'driver' | 'contractor' | 'undefined';
     };
 
     req.userId = decoded.id;
+    req.accountType = decoded.accountType;
 
     next();
   } catch {

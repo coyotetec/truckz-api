@@ -7,5 +7,11 @@ export async function findAddresses(userId: string) {
     },
   });
 
-  return addresses;
+  const mappedAddresses = addresses.map((address) => ({
+    ...address,
+    latitude: address.latitude.toNumber(),
+    longitude: address.longitude.toNumber(),
+  }));
+
+  return mappedAddresses;
 }

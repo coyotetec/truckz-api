@@ -91,3 +91,33 @@ export const contractorStoreSchema = z.object({
     },
   ),
 });
+
+export const updateContratorSchema = z.object({
+  name: z.string({
+    required_error: 'name is a required field',
+    invalid_type_error: 'name must be a string',
+  }),
+  cnpj: z
+    .string({
+      invalid_type_error: 'cnpj must be a string',
+    })
+    .optional(),
+  cpf: z
+    .string({
+      invalid_type_error: 'cpf must be a string',
+    })
+    .optional(),
+  stateRegistration: z.string({
+    required_error: 'stateRegistration is a required field',
+    invalid_type_error: 'stateRegistration must be a string',
+  }),
+  phoneNumber: z.string({
+    required_error: 'phoneNumber is a required field',
+    invalid_type_error: 'phoneNumber must be a string',
+  }),
+  whatsappNumber: z
+    .string({
+      invalid_type_error: 'whatsappNumber must be a string',
+    })
+    .optional(),
+});

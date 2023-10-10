@@ -4,12 +4,20 @@ import LoadRepository from '../../repositories/LoadRepository';
 import { APPError } from '../../errors/APPError';
 
 export async function closeLoad(
-  id: string,
+  loadId: string,
   status: z.infer<typeof loadCloseStatus>,
+  userId: string,
 ) {
-  const load = await LoadRepository.findUnique({
+  const load = await LoadRepository.findFirst({
     where: {
-      id,
+      id: loadId,
+      contractor: {
+        user: {
+          some: {
+            id: userId,
+          },
+        },
+      },
     },
   });
 
@@ -17,7 +25,7 @@ export async function closeLoad(
     throw new APPError('load does not exists');
   }
 
-  await LoadRepository.updateUnique(id, {
+  await LoadRepository.updateUnique(loadId, {
     status,
   });
 }

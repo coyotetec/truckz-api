@@ -4,7 +4,6 @@ import UserRepository from '../../repositories/UserRepository';
 import DriverRepository from '../../repositories/DriverRepository';
 import { APPError } from '../../errors/APPError';
 import { hashPassword } from '../../../utils/hashPassword';
-import * as date from 'date-fns';
 
 export async function createDriver(payload: z.infer<typeof driverStoreSchema>) {
   const userAlreadyExists = await UserRepository.findFirst({
@@ -43,7 +42,7 @@ export async function createDriver(payload: z.infer<typeof driverStoreSchema>) {
   const driver = await DriverRepository.create({
     fullName: payload.fullName,
     cpf: payload.cpf,
-    birthDate: date.parse(payload.birthDate, 'YYYY', new Date()),
+    birthDate: payload.birthDate,
     phoneNumber: payload.phoneNumber,
     whatsappNumber: payload.whatsappNumber || payload.phoneNumber,
     rntrc: payload.rntrc,

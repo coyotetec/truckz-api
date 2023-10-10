@@ -9,6 +9,7 @@ import AddressController from './app/controllers/AddressController';
 
 import { upload } from './libs/multer';
 import { authentication } from './app/middlewares/authentication';
+import UserController from './app/controllers/UserController';
 
 export const router = Router();
 
@@ -21,14 +22,26 @@ router.post(
   upload.single('avatar'),
   ContractorController.store,
 );
-router.get('/contractors/:username/available', ContractorController.username);
+router.put('/contractors', authentication, ContractorController.update);
+
+router.get('/user/:username/available', UserController.username);
+router.put(
+  '/user',
+  authentication,
+  upload.single('avatar'),
+  UserController.update,
+);
 
 router.post('/drivers', DriverController.store);
 
-router.get('/checkins', CheckinController.index);
+router.get('/checkins', authentication, CheckinController.index);
 router.post('/checkins', authentication, CheckinController.store);
+router.patch('/checkins/disable', authentication, CheckinController.disable);
 
 router.get('/addresses', authentication, AddressController.index);
+router.put('/addresses/:id', authentication, AddressController.update);
+router.get('/addresses/:id', authentication, AddressController.show);
+router.post('/addresses', authentication, AddressController.store);
 
 router.get('/loads', authentication, LoadController.index);
 router.get('/loads/:id', authentication, LoadController.show);
@@ -39,6 +52,11 @@ router.post(
   LoadController.store,
 );
 router.delete('/loads/:id', authentication, LoadController.close);
-router.put('/loads/:id', authentication, LoadController.update);
+router.put(
+  '/loads/:id',
+  authentication,
+  upload.array('images'),
+  LoadController.update,
+);
 
 router.post('/authenticate/login', AuthenticationController.index);

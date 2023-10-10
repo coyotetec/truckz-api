@@ -4,13 +4,28 @@ import { APPError } from '../../errors/APPError';
 import { validatePassword } from '../../../utils/validatePassword';
 import UserRepository from '../../repositories/UserRepository';
 import jwt from 'jsonwebtoken';
+import CheckinRepository from '../../repositories/CheckinRepository';
+
+interface ContractorResponse {
+  name: string;
+}
+
+interface DriverResponse {
+  name: string;
+  lastCheckin?: {
+    id: string;
+    active: boolean;
+    latitude: number;
+    longitude: number;
+    city: string;
+    state: string;
+    checkinAt: Date;
+    driverId: string;
+  };
+}
 
 export async function makeLogin(data: z.infer<typeof loginSchema>) {
   const user = await UserRepository.findFirst({
-    include: {
-      driver: true,
-      contractor: true,
-    },
     where: {
       OR: [
         {
@@ -40,13 +55,57 @@ export async function makeLogin(data: z.infer<typeof loginSchema>) {
     throw new APPError('incorrect password');
   }
 
+  const accountType = user.driver
+    ? 'driver'
+    : user.contractor
+    ? 'contractor'
+    : 'undefined';
   const secret = process.env.JWT_SECRET as string;
   const token = jwt.sign(
     {
       id: user.id,
+      accountType,
     },
     secret,
   );
 
-  return token;
+  const contractor: ContractorResponse = {
+    name: user.contractor?.name || '',
+  };
+  const driver: DriverResponse = {
+    name: user.driver?.fullName || '',
+  };
+
+  if (accountType === 'driver') {
+    const lastCheckin = await CheckinRepository.findFirst({
+      where: {
+        active: true,
+        driverId: user.driver?.id,
+      },
+    });
+
+    if (lastCheckin) {
+      driver.lastCheckin = {
+        ...lastCheckin,
+        latitude: lastCheckin.latitude.toNumber(),
+        longitude: lastCheckin.longitude.toNumber(),
+      };
+    }
+  }
+
+  return {
+    token,
+    type: accountType,
+    user: {
+      ...(user.avatarUrl && {
+        avatarUrl: `https://s3.amazonaws.com/truckz-test/${user.avatarUrl}`,
+      }),
+      ...(accountType === 'contractor' && {
+        contractor,
+      }),
+      ...(accountType === 'driver' && {
+        driver,
+      }),
+    },
+  };
 }

@@ -2,12 +2,12 @@ import { z } from 'zod';
 
 export const driverStoreSchema = z.object({
   fullName: z.string({
-    required_error: 'name is a required field',
-    invalid_type_error: 'name must be a string',
+    required_error: 'fullName is a required field',
+    invalid_type_error: 'fullName must be a string',
   }),
-  birthDate: z.string({
+  birthDate: z.coerce.date({
     required_error: 'birthDate is a required field',
-    invalid_type_error: 'birthDate must be a string',
+    invalid_type_error: 'birthDate must be a date',
   }),
   cpf: z.string({
     required_error: 'cpf is a required field',

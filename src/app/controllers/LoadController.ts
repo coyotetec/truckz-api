@@ -1,5 +1,9 @@
 import { Request, Response } from 'express';
-import { loadCloseStatus, loadStoreSchema } from '../schemas/loadSchemas';
+import {
+  loadCloseStatus,
+  loadIndexSchema,
+  loadStoreSchema,
+} from '../schemas/loadSchemas';
 import { createLoad } from '../useCases/load/createLoad';
 import { findLoads } from '../useCases/load/findLoads';
 import { findLoadById } from '../useCases/load/findLoadById';
@@ -8,11 +12,16 @@ import { updateLoad } from '../useCases/load/updateLoad';
 
 class LoadController {
   async index(req: Request, res: Response) {
-    if (!req.userId) {
+    const filters = loadIndexSchema.safeParse(req.query);
+    if (!req.userId || !req.accountType) {
       return res.sendStatus(404);
     }
 
-    const loads = await findLoads(req.userId);
+    const loads = await findLoads(
+      req.userId,
+      req.accountType,
+      filters.success ? filters.data : undefined,
+    );
 
     res.json(loads);
   }
@@ -42,6 +51,22 @@ class LoadController {
       req.body.price = Number(req.body.price);
     }
 
+    if (typeof req.body?.length === 'string') {
+      req.body.length = Number(req.body.length);
+    }
+
+    if (typeof req.body?.height === 'string') {
+      req.body.height = Number(req.body.height);
+    }
+
+    if (typeof req.body?.width === 'string') {
+      req.body.width = Number(req.body.width);
+    }
+
+    if (typeof req.body?.weight === 'string') {
+      req.body.weight = Number(req.body.weight);
+    }
+
     const data = loadStoreSchema.parse(req.body);
     const load = await createLoad(
       data,
@@ -60,7 +85,7 @@ class LoadController {
 
     const status = loadCloseStatus.parse(req.body.status);
 
-    await closeLoad(id, status);
+    await closeLoad(id, status, req.userId);
 
     res.sendStatus(204);
   }
@@ -71,10 +96,43 @@ class LoadController {
       return res.sendStatus(404);
     }
 
+    if (typeof req.body?.pickupAddress === 'string') {
+      req.body.pickupAddress = JSON.parse(req.body.pickupAddress);
+    }
+
+    if (typeof req.body?.deliveryAddress === 'string') {
+      req.body.deliveryAddress = JSON.parse(req.body.deliveryAddress);
+    }
+
+    if (typeof req.body?.price === 'string') {
+      req.body.price = Number(req.body.price);
+    }
+
+    if (typeof req.body?.length === 'string') {
+      req.body.length = Number(req.body.length);
+    }
+
+    if (typeof req.body?.height === 'string') {
+      req.body.height = Number(req.body.height);
+    }
+
+    if (typeof req.body?.width === 'string') {
+      req.body.width = Number(req.body.width);
+    }
+
+    if (typeof req.body?.weight === 'string') {
+      req.body.weight = Number(req.body.weight);
+    }
+
     const dataUpdate = loadStoreSchema.parse(req.body);
 
-    await updateLoad(req.userId, loadId, dataUpdate);
-    res.sendStatus(204);
+    const loadUpdated = await updateLoad(
+      req.userId,
+      loadId,
+      dataUpdate,
+      req.files as Express.Multer.File[],
+    );
+    res.status(200).json(loadUpdated);
   }
 }
 

@@ -4,7 +4,7 @@ import { uploadImage } from '../../../utils/uploadImage';
 import LoadRepository from '../../repositories/LoadRepository';
 import { APPError } from '../../errors/APPError';
 import ContractorRepository from '../../repositories/ContractorRepository';
-import { createOrUpdateAddress } from '../../../utils/createOrUpdateAddress';
+import { findOrCreateAddress } from './findOrCreateAddress';
 
 export async function createLoad(
   payload: z.infer<typeof loadStoreSchema>,
@@ -25,19 +25,13 @@ export async function createLoad(
     throw new APPError('contractor does not exists');
   }
 
-  const deliveryAddress = await createOrUpdateAddress(
+  const deliveryAddress = await findOrCreateAddress(
     payload.deliveryAddressId,
-    payload.deliveryAddress && {
-      name: 'Endereço Delivery',
-      ...payload.deliveryAddress,
-    },
+    payload.deliveryAddress && payload.deliveryAddress,
   );
-  const pickupAddress = await createOrUpdateAddress(
+  const pickupAddress = await findOrCreateAddress(
     payload.pickupAddressId,
-    payload.pickupAddress && {
-      name: 'Endereço Pickup',
-      ...payload.pickupAddress,
-    },
+    payload.pickupAddress && payload.pickupAddress,
   );
 
   if (!deliveryAddress) {
@@ -65,6 +59,7 @@ export async function createLoad(
   const load = await LoadRepository.create({
     contractorId: contractor.id,
     title: payload.title,
+    type: payload.type,
     price: payload.price,
     length: payload.length,
     width: payload.width,

@@ -5,6 +5,7 @@ import {
   checkinIndexSchema,
   checkinStoreSchema,
 } from '../schemas/checkinSchemas';
+import { disableCheckin } from '../useCases/checkin/disableCheckin';
 
 class CheckinController {
   async index(req: Request, res: Response) {
@@ -23,6 +24,14 @@ class CheckinController {
     const checkin = await makeCheckin(req.userId, data);
 
     return res.status(201).json(checkin);
+  }
+
+  async disable(req: Request, res: Response) {
+    if (!req.userId) {
+      return res.sendStatus(404);
+    }
+
+    await disableCheckin(req.userId);
   }
 }
 

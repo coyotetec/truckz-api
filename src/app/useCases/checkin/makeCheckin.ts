@@ -29,6 +29,13 @@ export async function makeCheckin(
   //   longitude: payload.longitude,
   // });
 
+  const mappedCheckin = {
+    ...checkin,
+    latitude: checkin.latitude.toNumber(),
+    longitude: checkin.longitude.toNumber(),
+  };
+
+  return mappedCheckin;
   const checkinHour = await prisma.checkin.findFirst({
     where: {
       id: userId,
