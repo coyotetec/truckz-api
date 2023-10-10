@@ -1261,6 +1261,13 @@
   dependencies:
     "@types/express" "*"
 
+"@types/node-schedule@^2.1.1":
+  version "2.1.1"
+  resolved "https://registry.npmjs.org/@types/node-schedule/-/node-schedule-2.1.1.tgz"
+  integrity sha512-FaqkbBizA+DinA0XWtAhdbEXykUkkqzBWT4BSnhn71z9C+vvcDgNcHvTP59nBhMg3o39E/ZY8zB/AQ6/HGuRag==
+  dependencies:
+    "@types/node" "*"
+
 "@types/node@*", "@types/node@^20.4.2":
   version "20.5.0"
   resolved "https://registry.npmjs.org/@types/node/-/node-20.5.0.tgz"

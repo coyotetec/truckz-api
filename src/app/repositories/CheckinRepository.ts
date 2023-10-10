@@ -19,6 +19,14 @@ interface FindAllQueryResponse {
   whatsapp_number: string;
 }
 
+interface IUpdate {
+  where: Prisma.CheckinWhereUniqueInput;
+  data: Prisma.XOR<
+    Prisma.CheckinUpdateInput,
+    Prisma.CheckinUncheckedUpdateInput
+  >;
+}
+
 class CheckinRepository {
   async findAll(data: { latitude: number; longitude: number; radius: number }) {
     return prisma.$queryRaw<FindAllQueryResponse[]>`
@@ -61,6 +69,13 @@ class CheckinRepository {
         driverId,
         active: true,
       },
+    });
+  }
+
+  async update({ where, data }: IUpdate) {
+    return prisma.checkin.update({
+      where,
+      data,
     });
   }
 }

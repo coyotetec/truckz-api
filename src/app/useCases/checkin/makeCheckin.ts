@@ -3,7 +3,8 @@ import CheckinRepository from '../../repositories/CheckinRepository';
 import { checkinStoreSchema } from '../../schemas/checkinSchemas';
 import DriverRepository from '../../repositories/DriverRepository';
 import { APPError } from '../../errors/APPError';
-import { prisma } from '../../../libs/prisma';
+import { add } from 'date-fns';
+import { scheduleJob } from 'node-schedule';
 
 export async function makeCheckin(
   userId: string,
@@ -21,13 +22,13 @@ export async function makeCheckin(
 
   await CheckinRepository.disableAll(driver.id);
 
-  // const checkin = await CheckinRepository.create({
-  //   driverId: driver.id,
-  //   city: payload.city,
-  //   state: payload.state,
-  //   latitude: payload.latitude,
-  //   longitude: payload.longitude,
-  // });
+  const checkin = await CheckinRepository.create({
+    driverId: driver.id,
+    city: payload.city,
+    state: payload.state,
+    latitude: payload.latitude,
+    longitude: payload.longitude,
+  });
 
   const mappedCheckin = {
     ...checkin,
@@ -35,17 +36,22 @@ export async function makeCheckin(
     longitude: checkin.longitude.toNumber(),
   };
 
-  return mappedCheckin;
-  const checkinHour = await prisma.checkin.findFirst({
-    where: {
-      id: userId,
-    },
-    select: {
-      checkinAt: true,
-    },
+  const { checkinAt, id } = checkin;
+
+  const nextCheckin = add(checkinAt, {
+    seconds: 10,
   });
 
-  console.log(checkinHour);
+  scheduleJob(nextCheckin, async () => {
+    await CheckinRepository.update({
+      where: {
+        id,
+      },
+      data: {
+        active: false,
+      },
+    });
+  });
 
-  return checkinHour;
+  return mappedCheckin;
 }
