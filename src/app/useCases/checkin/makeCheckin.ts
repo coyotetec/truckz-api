@@ -3,6 +3,8 @@ import CheckinRepository from '../../repositories/CheckinRepository';
 import { checkinStoreSchema } from '../../schemas/checkinSchemas';
 import DriverRepository from '../../repositories/DriverRepository';
 import { APPError } from '../../errors/APPError';
+import { add } from 'date-fns';
+import { scheduleJob } from 'node-schedule';
 
 export async function makeCheckin(
   userId: string,
@@ -33,6 +35,23 @@ export async function makeCheckin(
     latitude: checkin.latitude.toNumber(),
     longitude: checkin.longitude.toNumber(),
   };
+
+  const { checkinAt, id } = checkin;
+
+  const nextCheckin = add(checkinAt, {
+    hours: 24,
+  });
+
+  scheduleJob(nextCheckin, async () => {
+    await CheckinRepository.update({
+      where: {
+        id,
+      },
+      data: {
+        active: false,
+      },
+    });
+  });
 
   return mappedCheckin;
 }

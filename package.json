@@ -21,6 +21,7 @@
     "@types/morgan": "^1.9.4",
     "@types/multer": "^1.4.7",
     "@types/node": "^20.4.2",
+    "@types/node-schedule": "^2.1.1",
     "@types/uuid": "^9.0.2",
     "eslint": "^8.45.0",
     "nodemon": "^3.0.1",
@@ -42,6 +43,7 @@
     "jsonwebtoken": "^9.0.2",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
+    "node-schedule": "^2.1.1",
     "sharp": "^0.32.5",
     "uuid": "^9.0.0",
     "zod": "^3.21.4"
