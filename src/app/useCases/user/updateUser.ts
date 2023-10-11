@@ -46,19 +46,21 @@ export async function updateUser(
 
   const formatedOriginalName = avatar?.originalname.split('.');
 
+  let avatarFileName = avatarUrl;
+
   if (
     avatarUrl &&
     formatedOriginalName &&
     avatarUrl !== formatedOriginalName[0]
   ) {
-    deleteImage(avatarUrl);
+    avatarFileName = avatar
+      ? await uploadImage(avatar, {
+          height: 200,
+        })
+      : '';
+  } else {
+    avatarUrl && deleteImage(avatarUrl);
   }
-
-  const avatarFileName = avatar
-    ? await uploadImage(avatar, {
-        height: 200,
-      })
-    : '';
 
   const hashedPassword = await hashPassword(payload.password);
 
