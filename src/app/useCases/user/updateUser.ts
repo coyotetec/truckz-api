@@ -33,7 +33,7 @@ export async function updateUser(
     },
   });
 
-  if (userAlreadyExists) {
+  if (userAlreadyExists && userAlreadyExists.id !== userId) {
     const sameFields = [
       ...(userAlreadyExists?.email === payload.email ? ['email'] : []),
       ...(userAlreadyExists?.username === payload.username ? ['username'] : []),
@@ -44,7 +44,15 @@ export async function updateUser(
     );
   }
 
-  avatarUrl && deleteImage(avatarUrl);
+  const formatedOriginalName = avatar?.originalname.split('.');
+
+  if (
+    avatarUrl &&
+    formatedOriginalName &&
+    avatarUrl !== formatedOriginalName[0]
+  ) {
+    deleteImage(avatarUrl);
+  }
 
   const avatarFileName = avatar
     ? await uploadImage(avatar, {
