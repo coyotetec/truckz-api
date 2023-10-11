@@ -33,7 +33,7 @@ export async function updateUser(
     },
   });
 
-  if (userAlreadyExists) {
+  if (userAlreadyExists && userAlreadyExists.id !== userId) {
     const sameFields = [
       ...(userAlreadyExists?.email === payload.email ? ['email'] : []),
       ...(userAlreadyExists?.username === payload.username ? ['username'] : []),
@@ -44,13 +44,23 @@ export async function updateUser(
     );
   }
 
-  avatarUrl && deleteImage(avatarUrl);
+  const formatedOriginalName = avatar?.originalname.split('.');
 
-  const avatarFileName = avatar
-    ? await uploadImage(avatar, {
-        height: 200,
-      })
-    : '';
+  let avatarFileName = avatarUrl;
+
+  if (
+    avatarUrl &&
+    formatedOriginalName &&
+    avatarUrl !== formatedOriginalName[0]
+  ) {
+    avatarFileName = avatar
+      ? await uploadImage(avatar, {
+          height: 200,
+        })
+      : '';
+  } else {
+    avatarUrl && deleteImage(avatarUrl);
+  }
 
   const hashedPassword = await hashPassword(payload.password);
 
