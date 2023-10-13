@@ -33,6 +33,7 @@ router.put(
 );
 
 router.post('/drivers', DriverController.store);
+router.put('/drivers', authentication, DriverController.update);
 
 router.get('/checkins', authentication, CheckinController.index);
 router.post('/checkins', authentication, CheckinController.store);

@@ -58,7 +58,6 @@ export async function updateUser(
           height: 200,
         })
       : '';
-  } else {
     avatarUrl && deleteImage(avatarUrl);
   }
 

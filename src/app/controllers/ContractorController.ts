@@ -20,7 +20,7 @@ class CompanyController {
 
   async update(req: Request, res: Response) {
     if (!req.userId) {
-      return res.sendStatus(404);
+      return res.sendStatus(500);
     }
 
     if (typeof req.body?.address === 'string') {
