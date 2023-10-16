@@ -151,3 +151,39 @@ export const driverStoreSchema = z.object({
     },
   ),
 });
+
+export const updateDriverSchema = z.object({
+  fullName: z.string({
+    required_error: 'fullName is a required field',
+    invalid_type_error: 'fullName must be a string',
+  }),
+  birthDate: z.coerce.date({
+    required_error: 'birthDate is a required field',
+    invalid_type_error: 'birthDate must be a date',
+  }),
+  cpf: z.string({
+    required_error: 'cpf is a required field',
+    invalid_type_error: 'cpf must be a string',
+  }),
+  cnhNumber: z.string({
+    required_error: 'cnhNumber is a required field',
+    invalid_type_error: 'cnhNumber must be a string',
+  }),
+  cnhCategory: z.string({
+    required_error: 'cnhCategory is a required field',
+    invalid_type_error: 'cnhCategory must be a string',
+  }),
+  rntrc: z.string({
+    required_error: 'rntrc is a required field',
+    invalid_type_error: 'rntrc must be a string',
+  }),
+  phoneNumber: z.string({
+    required_error: 'phoneNumber is a required field',
+    invalid_type_error: 'phoneNumber must be a string',
+  }),
+  whatsappNumber: z
+    .string({
+      invalid_type_error: 'whatsappNumber must be a string',
+    })
+    .optional(),
+});

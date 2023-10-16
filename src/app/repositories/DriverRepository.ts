@@ -4,6 +4,10 @@ import { prisma } from '../../libs/prisma';
 interface IFindFirstArgs {
   where: Prisma.DriverWhereInput;
 }
+interface IUpdateArgs {
+  where: Prisma.DriverWhereUniqueInput;
+  data: Prisma.XOR<Prisma.DriverUpdateInput, Prisma.DriverUncheckedUpdateInput>;
+}
 
 class DriverRepository {
   async create(
@@ -20,6 +24,13 @@ class DriverRepository {
   async findFirst({ where }: IFindFirstArgs) {
     return prisma.driver.findFirst({
       where,
+    });
+  }
+
+  async update({ where, data }: IUpdateArgs) {
+    return prisma.driver.update({
+      where,
+      data,
     });
   }
 }
