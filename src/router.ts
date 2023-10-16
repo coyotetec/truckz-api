@@ -10,6 +10,7 @@ import AddressController from './app/controllers/AddressController';
 import { upload } from './libs/multer';
 import { authentication } from './app/middlewares/authentication';
 import UserController from './app/controllers/UserController';
+import TruckController from './app/controllers/TruckController';
 
 export const router = Router();
 
@@ -59,5 +60,7 @@ router.put(
   upload.array('images'),
   LoadController.update,
 );
+
+router.put('/trucks/:id', authentication, TruckController.update);
 
 router.post('/authenticate/login', AuthenticationController.index);
