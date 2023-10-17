@@ -97,6 +97,7 @@ export async function makeLogin(data: z.infer<typeof loginSchema>) {
     token,
     type: accountType,
     user: {
+      id: user.id,
       ...(user.avatarUrl && {
         avatarUrl: `https://s3.amazonaws.com/truckz-test/${user.avatarUrl}`,
       }),
