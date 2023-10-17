@@ -25,6 +25,7 @@ router.post(
 );
 router.put('/contractors', authentication, ContractorController.update);
 
+router.get('/users/:id', authentication, UserController.show);
 router.get('/user/:username/available', UserController.username);
 router.put(
   '/user',
