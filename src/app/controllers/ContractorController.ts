@@ -34,10 +34,6 @@ class CompanyController {
       return res.sendStatus(500);
     }
 
-    if (typeof req.body?.address === 'string') {
-      req.body.address = JSON.parse(req.body.address);
-    }
-
     const dataToUpdate = updateContratorSchema.parse(req.body);
     const contractorUpdated = await updateContractor(dataToUpdate, req.userId);
     return res.status(200).json(contractorUpdated);
