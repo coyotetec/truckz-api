@@ -129,6 +129,7 @@ export async function findLoads(
         id: load.id,
         title: load.title,
         status: load.status,
+        type: load.type,
         price: load.price.toNumber(),
         length: load.length?.toNumber(),
         width: load.width?.toNumber(),
@@ -183,7 +184,9 @@ export async function findLoads(
           stateRegistration: contractor.stateRegistration,
           phoneNumber: contractor.phoneNumber,
           whatsappNumber: contractor.whatsappNumber,
-          avatarUrl: `https://truckz-test.s3.amazonaws.com/${user.avatarUrl}`,
+          ...(user.avatarUrl && {
+            avatarUrl: `https://truckz-test.s3.amazonaws.com/${user.avatarUrl}`,
+          }),
           createdAt: user.createdAt,
           mainAddress: {
             city: contractorMainAddress.city,

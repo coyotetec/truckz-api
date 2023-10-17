@@ -24,6 +24,7 @@ interface IUpdateArgs {
 interface FindCloseQueryResponse {
   id: string;
   title: string | null;
+  type: 'complement' | 'full' | 'full_complement';
   status: 'active' | 'cancelled' | 'finished';
   price: Prisma.Decimal;
   length: Prisma.Decimal | null;

@@ -27,7 +27,10 @@ export async function updateContractor(
     },
   });
 
-  if (contractorAlreadyExists) {
+  if (
+    contractorAlreadyExists &&
+    contractorAlreadyExists.id !== contractor.contractorId
+  ) {
     const sameFields = [
       ...(payload.cpf && contractorAlreadyExists?.cpf === payload.cpf
         ? ['cpf']
@@ -43,7 +46,6 @@ export async function updateContractor(
   }
 
   const { contractorId } = contractor;
-  console.log(contractorId);
   const contractorUpdated = await ContractorRepository.update({
     where: {
       id: contractorId || undefined,
