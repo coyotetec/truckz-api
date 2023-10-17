@@ -39,10 +39,10 @@ export async function makeCheckin(
   const { checkinAt, id } = checkin;
 
   const nextCheckin = add(checkinAt, {
-    hours: 24,
+    seconds: 24,
   });
 
-  scheduleJob(nextCheckin, async () => {
+  scheduleJob(userId, nextCheckin, async () => {
     await CheckinRepository.update({
       where: {
         id,
