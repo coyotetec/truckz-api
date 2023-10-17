@@ -33,7 +33,7 @@ class CheckinController {
 
     await disableCheckin(req.userId);
 
-    return res.sendStatus(204);
+    return res.sendStatus(200);
   }
 }
 
