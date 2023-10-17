@@ -18,6 +18,7 @@ router.get('/server-is-up', (request, response) => {
   response.send(true);
 });
 
+router.get('/contractors', authentication, ContractorController.show);
 router.post(
   '/contractors',
   upload.single('avatar'),
