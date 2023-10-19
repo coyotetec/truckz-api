@@ -17,7 +17,7 @@ class CheckinController {
 
   async store(req: Request, res: Response) {
     if (!req.userId) {
-      return res.sendStatus(404);
+      return res.sendStatus(500);
     }
 
     const data = checkinStoreSchema.parse(req.body);
@@ -28,7 +28,7 @@ class CheckinController {
 
   async disable(req: Request, res: Response) {
     if (!req.userId) {
-      return res.sendStatus(404);
+      return res.sendStatus(500);
     }
 
     await disableCheckin(req.userId);

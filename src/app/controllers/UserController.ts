@@ -14,7 +14,7 @@ class UserController {
 
   async update(req: Request, res: Response) {
     if (!req.userId) {
-      return res.sendStatus(404);
+      return res.sendStatus(500);
     }
     const dataToUpdate = updateUserSchema.parse(req.body);
 

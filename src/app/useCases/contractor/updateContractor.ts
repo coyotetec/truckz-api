@@ -43,7 +43,7 @@ export async function updateContractor(
   }
 
   const { contractorId } = contractor;
-  console.log(contractorId);
+
   const contractorUpdated = await ContractorRepository.update({
     where: {
       id: contractorId || undefined,

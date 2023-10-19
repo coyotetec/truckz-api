@@ -14,7 +14,7 @@ class LoadController {
   async index(req: Request, res: Response) {
     const filters = loadIndexSchema.safeParse(req.query);
     if (!req.userId || !req.accountType) {
-      return res.sendStatus(404);
+      return res.sendStatus(500);
     }
 
     const loads = await findLoads(
@@ -36,7 +36,7 @@ class LoadController {
 
   async store(req: Request, res: Response) {
     if (!req.userId) {
-      return res.sendStatus(404);
+      return res.sendStatus(500);
     }
 
     if (typeof req.body?.pickupAddress === 'string') {
@@ -80,7 +80,7 @@ class LoadController {
   async close(req: Request, res: Response) {
     const { id } = req.params;
     if (!req.userId) {
-      return res.sendStatus(404);
+      return res.sendStatus(500);
     }
 
     const status = loadCloseStatus.parse(req.body.status);
@@ -93,7 +93,7 @@ class LoadController {
   async update(req: Request, res: Response) {
     const { id: loadId } = req.params;
     if (!req.userId) {
-      return res.sendStatus(404);
+      return res.sendStatus(500);
     }
 
     if (typeof req.body?.pickupAddress === 'string') {
