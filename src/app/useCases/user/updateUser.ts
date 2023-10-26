@@ -77,5 +77,7 @@ export async function updateUser(
     },
   });
 
+  updatedUser.avatarUrl = `https://s3.amazonaws.com/truckz-test/${updatedUser.avatarUrl}`;
+
   return updatedUser;
 }
