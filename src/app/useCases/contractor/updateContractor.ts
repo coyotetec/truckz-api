@@ -27,7 +27,10 @@ export async function updateContractor(
     },
   });
 
-  if (contractorAlreadyExists) {
+  if (
+    contractorAlreadyExists &&
+    contractorAlreadyExists.id !== contractor.contractorId
+  ) {
     const sameFields = [
       ...(payload.cpf && contractorAlreadyExists?.cpf === payload.cpf
         ? ['cpf']

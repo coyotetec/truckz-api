@@ -58,10 +58,12 @@ export async function updateUser(
           height: 200,
         })
       : '';
-    avatarUrl && deleteImage(avatarUrl);
+    await deleteImage(avatarUrl);
   }
 
-  const hashedPassword = await hashPassword(payload.password);
+  const hashedPassword = payload.password
+    ? await hashPassword(payload.password)
+    : null;
 
   const updatedUser = await prisma.user.update({
     where: {
@@ -70,8 +72,8 @@ export async function updateUser(
     data: {
       email: payload.email,
       username: payload.username,
-      password: hashedPassword,
       avatarUrl: avatarFileName,
+      ...(hashedPassword && { password: hashedPassword }),
     },
   });
 

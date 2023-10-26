@@ -18,6 +18,7 @@ router.get('/server-is-up', (request, response) => {
   response.send(true);
 });
 
+router.get('/contractors', authentication, ContractorController.show);
 router.post(
   '/contractors',
   upload.single('avatar'),
@@ -25,6 +26,7 @@ router.post(
 );
 router.put('/contractors', authentication, ContractorController.update);
 
+router.get('/users/:id', authentication, UserController.show);
 router.get('/user/:username/available', UserController.username);
 router.put(
   '/user',

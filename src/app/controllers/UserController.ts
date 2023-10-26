@@ -2,8 +2,25 @@ import { Request, Response } from 'express';
 import { usernameAvailable } from '../useCases/user/usernameAvailable';
 import { updateUser } from '../useCases/user/updateUser';
 import { updateUserSchema } from '../schemas/userSchemas';
+import { findUserById } from '../useCases/user/findUserById';
 
 class UserController {
+  async show(req: Request, res: Response) {
+    if (!req.userId) {
+      return res.sendStatus(404);
+    }
+
+    const { id } = req.params;
+
+    if (req.userId !== id) {
+      return res.status(401).json({ error: "you can't get this user data" });
+    }
+
+    const user = await findUserById(id);
+
+    return res.json(user);
+  }
+
   async username(req: Request, res: Response) {
     const { username } = req.params;
 
