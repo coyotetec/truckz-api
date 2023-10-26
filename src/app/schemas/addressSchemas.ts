@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const addressSchema = z.object({
   name: z.string({
-    required_error: 'name is a required field',
+    required_error: 'address name is a required field',
   }),
   zipcode: z
     .string({
