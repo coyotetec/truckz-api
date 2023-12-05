@@ -35,7 +35,8 @@ router.put(
   UserController.update,
 );
 
-router.post('/drivers', DriverController.store);
+router.get('/drivers/:userId', authentication, DriverController.show);
+router.post('/drivers', upload.single('avatar'), DriverController.store);
 router.put('/drivers', authentication, DriverController.update);
 
 router.get('/checkins', authentication, CheckinController.index);
@@ -45,6 +46,7 @@ router.patch('/checkins/disable', authentication, CheckinController.disable);
 router.get('/addresses', authentication, AddressController.index);
 router.put('/addresses/:id', authentication, AddressController.update);
 router.get('/addresses/:id', authentication, AddressController.show);
+router.delete('/addresses/:id', authentication, AddressController.destroy);
 router.post('/addresses', authentication, AddressController.store);
 
 router.get('/loads', authentication, LoadController.index);

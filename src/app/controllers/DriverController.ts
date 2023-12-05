@@ -5,11 +5,42 @@ import {
 } from '../schemas/driverSchemas';
 import { createDriver } from '../useCases/driver/createDriver';
 import { updateDriver } from '../useCases/driver/updateDriver';
+import { findDriverByUserId } from '../useCases/driver/findDriverByUserId';
 
 class DriverController {
+  async show(req: Request, res: Response) {
+    if (!req.userId) {
+      return res.sendStatus(404);
+    }
+
+    const { userId } = req.params;
+
+    if (req.userId !== userId) {
+      return res.status(401).json({ error: "you can't get this user data" });
+    }
+
+    const driver = await findDriverByUserId(userId);
+
+    return res.json(driver);
+  }
+
   async store(req: Request, res: Response) {
+    if (typeof req.body?.address === 'string') {
+      req.body.address = JSON.parse(req.body.address);
+    }
+
+    if (typeof req.body?.truck === 'string') {
+      req.body.truck = JSON.parse(req.body.truck);
+    }
+
+    if (typeof req.body?.truck.axlesQty === 'string') {
+      req.body.truck.axlesQty = Number(req.body?.truck.axlesQty);
+    }
+
+    console.log(req.file);
+
     const data = driverStoreSchema.parse(req.body);
-    const driver = await createDriver(data);
+    const driver = await createDriver(data, req.file);
 
     res.status(201).json(driver);
   }
@@ -20,6 +51,7 @@ class DriverController {
     }
 
     const dataToUpdate = updateDriverSchema.parse(req.body);
+    console.log('aqui', dataToUpdate);
 
     const updatedDriver = await updateDriver(req.userId, dataToUpdate);
     res.status(200).json(updatedDriver);

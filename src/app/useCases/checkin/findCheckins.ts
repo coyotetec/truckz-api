@@ -17,6 +17,9 @@ export async function findCheckins(data: z.infer<typeof checkinIndexSchema>) {
     fullName: checkin.full_name,
     phoneNumber: checkin.phone_number,
     whatsappNumber: checkin.whatsapp_number,
+    ...(checkin.avatar_url && {
+      avatarUrl: `https://s3.amazonaws.com/truckz-test/${checkin.avatar_url}`,
+    }),
   }));
 
   return mappedCheckins;

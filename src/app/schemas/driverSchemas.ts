@@ -68,10 +68,12 @@ export const driverStoreSchema = z.object({
         required_error: 'truck.model is a required field',
         invalid_type_error: 'truck.model must be a string',
       }),
-      holderName: z.string({
-        required_error: 'truck.holderName is a required field',
-        invalid_type_error: 'truck.holderName must be a string',
-      }),
+      holderName: z
+        .string({
+          required_error: 'truck.holderName is a required field',
+          invalid_type_error: 'truck.holderName must be a string',
+        })
+        .optional(),
       holderCpf: z
         .string({
           invalid_type_error: 'truck.holderCpf must be a string',

@@ -17,6 +17,7 @@ interface FindAllQueryResponse {
   full_name: string;
   phone_number: string;
   whatsapp_number: string;
+  avatar_url: string;
 }
 
 interface IUpdate {
@@ -30,9 +31,10 @@ interface IUpdate {
 class CheckinRepository {
   async findAll(data: { latitude: number; longitude: number; radius: number }) {
     return prisma.$queryRaw<FindAllQueryResponse[]>`
-      SELECT c.*, d.full_name, d.phone_number, d.whatsapp_number
+      SELECT c.*, d.full_name, d.phone_number, d.whatsapp_number, u.avatar_url
       FROM checkin c
-      LEFT JOIN driver d on c.driver_id = d.id
+      LEFT JOIN driver d ON c.driver_id = d.id
+      LEFT JOIN "user" u ON d.user_id = u.id
       WHERE
         6371 * 2 * asin(sqrt(
           power(sin(radians(c.latitude - ${data.latitude}) / 2), 2) +
