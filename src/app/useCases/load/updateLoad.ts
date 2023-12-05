@@ -1,13 +1,13 @@
 import { z } from 'zod';
 import { loadStoreSchema } from '../../schemas/loadSchemas';
 import { APPError } from '../../errors/APPError';
-import { findOrCreateAddress } from './findOrCreateAddress';
 import { evaluatesDeletedImages } from '../../../utils/evaluatesDeletedImages';
 import { evaluatesNewImages } from '../../../utils/evaluatesNewImages';
 import { deleteImage } from '../../../utils/deleteImage';
 import { uploadImage } from '../../../utils/uploadImage';
 import LoadRepository from '../../repositories/LoadRepository';
 import LoadImageRepository from '../../repositories/LoadImageRepository';
+import { findCreateOrUpdateAddress } from './findCreateOrUpdateAddress';
 
 export async function updateLoad(
   userId: string,
@@ -79,29 +79,25 @@ export async function updateLoad(
       )
     : [];
 
-  const deliveryAddress = await findOrCreateAddress(
+  const deliveryAddressId = await findCreateOrUpdateAddress(
+    load.deliveryAddressId,
     payload.deliveryAddressId,
-    payload.deliveryAddress && {
-      ...payload.deliveryAddress,
-      name: 'Endereço Delivery',
-    },
+    payload.deliveryAddress && payload.deliveryAddress,
   );
 
-  const pickupAddress = await findOrCreateAddress(
+  const pickupAddressId = await findCreateOrUpdateAddress(
+    load.pickupAddressId,
     payload.pickupAddressId,
-    payload.pickupAddress && {
-      ...payload.pickupAddress,
-      name: 'Endereço Pickup',
-    },
+    payload.pickupAddress && payload.pickupAddress,
   );
 
-  if (!deliveryAddress) {
+  if (!deliveryAddressId) {
     throw new APPError(
       'you need to inform a valid deliveryId or pass data to create a new one',
     );
   }
 
-  if (!pickupAddress) {
+  if (!pickupAddressId) {
     throw new APPError(
       'you need to inform a valid pickupAddress or pass data to create a new one',
     );
@@ -123,9 +119,9 @@ export async function updateLoad(
       weight: payload.weight,
       weightUnit: payload.weightUnit,
       description: payload.description,
-      pickupAddressId: pickupAddress.id,
+      pickupAddressId,
       pickupDate: payload.pickupDate,
-      deliveryAddressId: deliveryAddress.id,
+      deliveryAddressId,
       deliveryDate: payload.deliveryDate,
       loadImage: {
         createMany: {
