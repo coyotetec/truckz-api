@@ -65,6 +65,14 @@ class AddressRepository {
       data,
     });
   }
+
+  async deleteById(id: string) {
+    return prisma.address.delete({
+      where: {
+        id,
+      },
+    });
+  }
 }
 
 export default new AddressRepository();
