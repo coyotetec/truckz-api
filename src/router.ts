@@ -28,7 +28,9 @@ router.post(
         height: 200,
       });
 
-      response.json({ message: `image uploaded, file name: ${fileName}` });
+      return response.json({
+        message: `image uploaded, file name: ${fileName}`,
+      });
     }
 
     response.status(400).json({ error: 'image was not provided' });
