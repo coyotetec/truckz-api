@@ -1,6 +1,8 @@
 import { APPError } from '../../errors/APPError';
 import LoadRepository from '../../repositories/LoadRepository';
 
+const storageBaseUrl = process.env.STORAGE_BASE_URL as string;
+
 export async function findLoadById(id: string) {
   const load = await LoadRepository.findUnique({
     where: {
@@ -19,9 +21,7 @@ export async function findLoadById(id: string) {
     width: load.width?.toNumber(),
     height: load.height?.toNumber(),
     weight: load.weight?.toNumber(),
-    loadImages: load.loadImage.map(
-      (image) => `https://truckz-test.s3.amazonaws.com/${image.url}`,
-    ),
+    loadImages: load.loadImage.map((image) => `${storageBaseUrl}/${image.url}`),
     pickupAddress: {
       ...load.pickupAddress,
       latitude: load.pickupAddress.latitude.toNumber(),

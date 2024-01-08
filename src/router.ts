@@ -11,12 +11,29 @@ import { upload } from './libs/multer';
 import { authentication } from './app/middlewares/authentication';
 import UserController from './app/controllers/UserController';
 import TruckController from './app/controllers/TruckController';
+import { uploadImage } from './utils/uploadImage';
 
 export const router = Router();
 
 router.get('/server-is-up', (request, response) => {
   response.send(true);
 });
+
+router.post(
+  '/test-storage',
+  upload.single('image'),
+  async (request, response) => {
+    if (request.file) {
+      const fileName = await uploadImage(request.file, {
+        height: 200,
+      });
+
+      response.json({ message: `image uploaded, file name: ${fileName}` });
+    }
+
+    response.status(400).json({ error: 'image was not provided' });
+  },
+);
 
 router.get('/contractors', authentication, ContractorController.show);
 router.post(

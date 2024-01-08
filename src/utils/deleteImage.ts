@@ -1,13 +1,7 @@
-import { s3Client } from '../libs/s3Client';
-import { DeleteObjectCommand } from '@aws-sdk/client-s3';
+import { minioClient } from '../libs/minioClient';
 
-const bucketName = process.env.S3_BUCKET_NAME as string;
+const bucketName = process.env.MINIO_BUCKET as string;
 
 export async function deleteImage(imageName: string) {
-  const deleteCommand = new DeleteObjectCommand({
-    Bucket: bucketName,
-    Key: imageName,
-  });
-
-  await s3Client.send(deleteCommand);
+  await minioClient.removeObject(bucketName, imageName);
 }

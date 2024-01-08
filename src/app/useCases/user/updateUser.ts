@@ -7,6 +7,8 @@ import { hashPassword } from '../../../utils/hashPassword';
 import { uploadImage } from '../../../utils/uploadImage';
 import { deleteImage } from '../../../utils/deleteImage';
 
+const storageBaseUrl = process.env.STORAGE_BASE_URL as string;
+
 export async function updateUser(
   payload: z.infer<typeof updateUserSchema>,
   userId: string,
@@ -77,7 +79,7 @@ export async function updateUser(
     },
   });
 
-  updatedUser.avatarUrl = `https://s3.amazonaws.com/truckz-test/${updatedUser.avatarUrl}`;
+  updatedUser.avatarUrl = `${storageBaseUrl}/${updatedUser.avatarUrl}`;
 
   return updatedUser;
 }
