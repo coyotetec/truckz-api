@@ -45,7 +45,6 @@ export async function createContractor(
       })
     : '';
   const hashedPassword = await hashPassword(payload.password);
-  console.log({ pass: payload.password, hash: hashedPassword });
 
   const contractor = await ContractorRepository.create({
     name: payload.name,
