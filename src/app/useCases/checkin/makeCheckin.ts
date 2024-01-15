@@ -39,7 +39,7 @@ export async function makeCheckin(
   const { checkinAt, id } = checkin;
 
   const nextCheckin = add(checkinAt, {
-    seconds: 24,
+    hours: 24,
   });
 
   scheduleJob(userId, nextCheckin, async () => {
