@@ -19,6 +19,7 @@ model User {
   contractor   Contractor? @relation("user", fields: [contractorId], references: [id])
   address      Address[]   @relation("user")
   driver       Driver?     @relation("user")
+  resetToken   ResetToken? @relation("user")
 
   @@map("user")
 }
@@ -192,4 +193,14 @@ model LoadAddress {
   deliveryAddressLoad Load[]  @relation("deliveryAddress")
 
   @@map("load_address")
+}
+
+model ResetToken {
+  id        String   @id @default(uuid())
+  token     String
+  user      User     @relation("user", fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId    String   @unique @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("reset_token")
 }

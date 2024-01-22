@@ -11,6 +11,10 @@ const validateEnv = () => {
     MINIO_SECRET_KEY: str(),
     MINIO_BUCKET: str(),
     STORAGE_BASE_URL: url(),
+    RESET_PASSWORD_URL: url(),
+    EMAIL_HOST: str(),
+    EMAIL_USERNAME: str(),
+    EMAIL_PASSWORD: str(),
   });
 };
 

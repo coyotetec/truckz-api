@@ -11,6 +11,11 @@ interface IFindUniqueArgs {
   include?: Prisma.UserInclude;
 }
 
+interface IUpdateArgs {
+  where: Prisma.UserWhereUniqueInput;
+  data: Prisma.XOR<Prisma.UserUpdateInput, Prisma.UserUncheckedUpdateInput>;
+}
+
 class UserRepository {
   async findFirst({ where }: IFindFirstArgs) {
     return prisma.user.findFirst({
@@ -33,6 +38,17 @@ class UserRepository {
     return prisma.user.findUnique({
       where,
       select,
+    });
+  }
+
+  async update({ where, data }: IUpdateArgs) {
+    return prisma.user.update({
+      where,
+      data,
+      include: {
+        driver: true,
+        contractor: true,
+      },
     });
   }
 }

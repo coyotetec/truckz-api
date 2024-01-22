@@ -87,3 +87,11 @@ router.put(
 router.put('/trucks/:id', authentication, TruckController.update);
 
 router.post('/authenticate/login', AuthenticationController.index);
+router.post(
+  '/authenticate/request-password-reset',
+  AuthenticationController.requestReset,
+);
+router.post(
+  '/authenticate/reset-password',
+  AuthenticationController.resetPassword,
+);
