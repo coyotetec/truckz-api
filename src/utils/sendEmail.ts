@@ -19,7 +19,7 @@ export async function sendEmail(
       pass: process.env.EMAIL_PASSWORD,
     },
   });
-  const source = fs.readFileSync(
+  const source = fs.existsSync(
     path.resolve(
       __dirname,
       '..',
@@ -28,15 +28,35 @@ export async function sendEmail(
       'emails',
       `${templateName}.hbs`,
     ),
-    'utf-8',
-  );
-  const template = Handlebars.compile(source);
-  const options = () => ({
-    from: '"Truckz" <suporte@truckz.com.br>',
-    to: email,
-    subject,
-    attachments: [
-      {
+  )
+    ? fs.readFileSync(
+        path.resolve(
+          __dirname,
+          '..',
+          'app',
+          'views',
+          'emails',
+          `${templateName}.hbs`,
+        ),
+        'utf-8',
+      )
+    : fs.readFileSync(
+        path.resolve(
+          __dirname,
+          '..',
+          '..',
+          'src',
+          'app',
+          'views',
+          'emails',
+          `${templateName}.hbs`,
+        ),
+        'utf-8',
+      );
+  const logoAttachment = fs.existsSync(
+    path.resolve(__dirname, '..', 'app', 'views', 'assets', 'logo.png'),
+  )
+    ? {
         filename: 'logo.png',
         path: path.resolve(
           __dirname,
@@ -47,8 +67,27 @@ export async function sendEmail(
           'logo.png',
         ),
         cid: 'logo',
-      },
-    ],
+      }
+    : {
+        filename: 'logo.png',
+        path: path.resolve(
+          __dirname,
+          '..',
+          '..',
+          'src',
+          'app',
+          'views',
+          'assets',
+          'logo.png',
+        ),
+        cid: 'logo',
+      };
+  const template = Handlebars.compile(source);
+  const options = () => ({
+    from: '"Truckz" <suporte@truckz.com.br>',
+    to: email,
+    subject,
+    attachments: [logoAttachment],
     html: template(payload),
   });
 
