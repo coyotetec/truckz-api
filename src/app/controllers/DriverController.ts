@@ -37,8 +37,6 @@ class DriverController {
       req.body.truck.axlesQty = Number(req.body?.truck.axlesQty);
     }
 
-    console.log(req.file);
-
     const data = driverStoreSchema.parse(req.body);
     const driver = await createDriver(data, req.file);
 
@@ -51,7 +49,6 @@ class DriverController {
     }
 
     const dataToUpdate = updateDriverSchema.parse(req.body);
-    console.log('aqui', dataToUpdate);
 
     const updatedDriver = await updateDriver(req.userId, dataToUpdate);
     res.status(200).json(updatedDriver);
