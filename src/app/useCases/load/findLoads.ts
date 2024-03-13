@@ -7,6 +7,7 @@ import LoadImageRepository from '../../repositories/LoadImageRepository';
 import LoadRepository from '../../repositories/LoadRepository';
 import UserRepository from '../../repositories/UserRepository';
 import { loadIndexSchema } from '../../schemas/loadSchemas';
+import LoadAddressRepository from '../../repositories/LoadAddressRepository';
 
 const storageBaseUrl = process.env.STORAGE_BASE_URL as string;
 
@@ -92,8 +93,8 @@ export async function findLoads(
         user,
         contractorMainAddress,
       ] = await Promise.all([
-        AddressRepository.findById(load.pickup_address_id),
-        AddressRepository.findById(load.delivery_address_id),
+        LoadAddressRepository.findById(load.pickup_address_id),
+        LoadAddressRepository.findById(load.delivery_address_id),
         LoadImageRepository.findMany({
           where: {
             loadId: load.id,
@@ -158,7 +159,6 @@ export async function findLoads(
           city: pickupAddress.city,
           latitude: pickupAddress.latitude.toNumber(),
           longitude: pickupAddress.longitude.toNumber(),
-          userId: pickupAddress.userId,
         },
         deliveryAddressId: load.delivery_address_id,
         deliveryDate: load.delivery_date,
@@ -174,7 +174,6 @@ export async function findLoads(
           city: deliveryAddress.city,
           latitude: deliveryAddress.latitude.toNumber(),
           longitude: deliveryAddress.longitude.toNumber(),
-          userId: deliveryAddress.userId,
         },
         contractor: {
           id: contractor.id,

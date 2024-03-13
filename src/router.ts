@@ -59,6 +59,7 @@ router.post('/drivers', upload.single('avatar'), DriverController.store);
 router.put('/drivers', authentication, DriverController.update);
 
 router.get('/checkins', authentication, CheckinController.index);
+router.get('/checkins/:userId', authentication, CheckinController.show);
 router.post('/checkins', authentication, CheckinController.store);
 router.patch('/checkins/disable', authentication, CheckinController.disable);
 

@@ -70,8 +70,8 @@ class LoadRepository {
       SELECT
         l.*
       FROM load l
-      LEFT JOIN address pa on l.pickup_address_id = pa.id
-      LEFT JOIN address da on l.delivery_address_id = da.id
+      LEFT JOIN load_address pa on l.pickup_address_id = pa.id
+      LEFT JOIN load_address da on l.delivery_address_id = da.id
       WHERE
         6371 * 2 * asin(sqrt(
           power(sin(radians(pa.latitude - ${data.latitude}) / 2), 2) +
