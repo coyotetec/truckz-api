@@ -43,6 +43,29 @@ class AddressRepository {
       },
     });
   }
+
+  deleteContractorLoadAddresses(contractorId: string) {
+    return prisma.loadAddress.deleteMany({
+      where: {
+        OR: [
+          {
+            deliveryAddressLoad: {
+              some: {
+                contractorId,
+              },
+            },
+          },
+          {
+            pickupAddressLoad: {
+              some: {
+                contractorId,
+              },
+            },
+          },
+        ],
+      },
+    });
+  }
 }
 
 export default new AddressRepository();

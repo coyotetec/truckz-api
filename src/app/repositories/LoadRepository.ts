@@ -134,6 +134,14 @@ class LoadRepository {
       data,
     });
   }
+
+  deleteContractorLoads(contractorId: string) {
+    return prisma.load.deleteMany({
+      where: {
+        contractorId,
+      },
+    });
+  }
 }
 
 export default new LoadRepository();

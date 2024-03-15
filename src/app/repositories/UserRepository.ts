@@ -51,6 +51,14 @@ class UserRepository {
       },
     });
   }
+
+  deleteById(id: string) {
+    return prisma.user.delete({
+      where: {
+        id,
+      },
+    });
+  }
 }
 
 export default new UserRepository();

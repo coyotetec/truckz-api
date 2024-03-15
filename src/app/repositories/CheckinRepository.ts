@@ -80,6 +80,14 @@ class CheckinRepository {
       data,
     });
   }
+
+  async deleteDriverCheckins(driverId: string) {
+    return prisma.checkin.deleteMany({
+      where: {
+        driverId,
+      },
+    });
+  }
 }
 
 export default new CheckinRepository();

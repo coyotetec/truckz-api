@@ -22,6 +22,26 @@ class LoadImageRepository {
       where,
     });
   }
+
+  findContractorLoadImages(contractorId: string) {
+    return prisma.loadImage.findMany({
+      where: {
+        load: {
+          contractorId,
+        },
+      },
+    });
+  }
+
+  deleteContractorLoadImages(contractorId: string) {
+    return prisma.loadImage.deleteMany({
+      where: {
+        load: {
+          contractorId,
+        },
+      },
+    });
+  }
 }
 
 export default new LoadImageRepository();

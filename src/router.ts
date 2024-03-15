@@ -53,6 +53,7 @@ router.put(
   upload.single('avatar'),
   UserController.update,
 );
+router.delete('/users', authentication, UserController.destroy);
 
 router.get('/drivers/:userId', authentication, DriverController.show);
 router.post('/drivers', upload.single('avatar'), DriverController.store);

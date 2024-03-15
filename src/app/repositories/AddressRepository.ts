@@ -73,6 +73,14 @@ class AddressRepository {
       },
     });
   }
+
+  deleteUserAddresses(userId: string) {
+    return prisma.address.deleteMany({
+      where: {
+        userId,
+      },
+    });
+  }
 }
 
 export default new AddressRepository();
