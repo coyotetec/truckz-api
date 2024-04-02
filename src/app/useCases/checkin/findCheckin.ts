@@ -1,9 +1,8 @@
-import { cancelJob } from 'node-schedule';
 import { APPError } from '../../errors/APPError';
 import CheckinRepository from '../../repositories/CheckinRepository';
 import DriverRepository from '../../repositories/DriverRepository';
 
-export async function disableCheckin(userId: string) {
+export async function findCheckin(userId: string) {
   const driver = await DriverRepository.findFirst({
     where: {
       userId,
@@ -14,7 +13,12 @@ export async function disableCheckin(userId: string) {
     throw new APPError('driver not found');
   }
 
-  cancelJob(userId);
+  const checkin = await CheckinRepository.findFirst({
+    where: {
+      active: true,
+      driverId: driver.id,
+    },
+  });
 
-  await CheckinRepository.disableAll(driver.id);
+  return checkin;
 }

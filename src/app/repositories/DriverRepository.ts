@@ -33,6 +33,14 @@ class DriverRepository {
       data,
     });
   }
+
+  deleteById(id: string) {
+    return prisma.driver.delete({
+      where: {
+        id,
+      },
+    });
+  }
 }
 
 export default new DriverRepository();

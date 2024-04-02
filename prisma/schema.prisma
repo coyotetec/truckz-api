@@ -19,26 +19,25 @@ model User {
   contractor   Contractor? @relation("user", fields: [contractorId], references: [id])
   address      Address[]   @relation("user")
   driver       Driver?     @relation("user")
+  resetToken   ResetToken? @relation("user")
 
   @@map("user")
 }
 
 model Address {
-  id                  String  @id @default(uuid())
-  name                String
-  zipcode             String?
-  address             String
-  number              Int?
-  district            String
-  reference           String?
-  state               String
-  city                String
-  latitude            Decimal
-  longitude           Decimal
-  userId              String? @map("user_id")
-  user                User?   @relation("user", fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
-  pickupAddressLoad   Load[]  @relation("pickupAddress")
-  deliveryAddressLoad Load[]  @relation("deliveryAddress")
+  id        String  @id @default(uuid())
+  name      String
+  zipcode   String?
+  address   String
+  number    Int?
+  district  String
+  reference String?
+  state     String
+  city      String
+  latitude  Decimal
+  longitude Decimal
+  userId    String? @map("user_id")
+  user      User?   @relation("user", fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
 
   @@map("address")
 }
@@ -82,7 +81,7 @@ model Truck {
   plate      String
   crvNumber  String    @map("crv_number")
   model      String
-  holderName String    @map("holder_name")
+  holderName String?   @map("holder_name")
   holderCpf  String?   @map("holder_cpf") @db.VarChar(11)
   holderCnpj String?   @map("holder_cnpj") @db.VarChar(14)
   type       TruckType
@@ -131,10 +130,10 @@ model Load {
   weight            Decimal?
   weightUnit        WeightUnit?    @map("weight_unit")
   description       String?
-  pickupAddress     Address        @relation("pickupAddress", fields: [pickupAddressId], references: [id], onUpdate: Cascade, onDelete: Restrict)
+  pickupAddress     LoadAddress    @relation("pickupAddress", fields: [pickupAddressId], references: [id], onUpdate: Cascade, onDelete: Restrict)
   pickupAddressId   String         @map("pickup_address_id")
   pickupDate        DateTime       @map("pickup_date") @db.Date
-  deliveryAddress   Address        @relation("deliveryAddress", fields: [deliveryAddressId], references: [id], onUpdate: Cascade, onDelete: Restrict)
+  deliveryAddress   LoadAddress    @relation("deliveryAddress", fields: [deliveryAddressId], references: [id], onUpdate: Cascade, onDelete: Restrict)
   deliveryAddressId String         @map("delivery_address_id")
   deliveryDate      DateTime       @map("delivery_date") @db.Date
   createdAt         DateTime       @default(now()) @map("created_at")
@@ -176,4 +175,32 @@ model LoadImage {
   loadId String @map("load_id")
 
   @@map("load_image")
+}
+
+model LoadAddress {
+  id                  String  @id @default(uuid())
+  name                String
+  zipcode             String?
+  address             String
+  number              Int?
+  district            String
+  reference           String?
+  state               String
+  city                String
+  latitude            Decimal
+  longitude           Decimal
+  pickupAddressLoad   Load[]  @relation("pickupAddress")
+  deliveryAddressLoad Load[]  @relation("deliveryAddress")
+
+  @@map("load_address")
+}
+
+model ResetToken {
+  id        String   @id @default(uuid())
+  token     String
+  user      User     @relation("user", fields: [userId], references: [id], onUpdate: Cascade, onDelete: Cascade)
+  userId    String   @unique @map("user_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("reset_token")
 }

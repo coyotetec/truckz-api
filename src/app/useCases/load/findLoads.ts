@@ -7,6 +7,9 @@ import LoadImageRepository from '../../repositories/LoadImageRepository';
 import LoadRepository from '../../repositories/LoadRepository';
 import UserRepository from '../../repositories/UserRepository';
 import { loadIndexSchema } from '../../schemas/loadSchemas';
+import LoadAddressRepository from '../../repositories/LoadAddressRepository';
+
+const storageBaseUrl = process.env.STORAGE_BASE_URL as string;
 
 export async function findLoads(
   userId: string,
@@ -37,7 +40,7 @@ export async function findLoads(
       height: load.height?.toNumber(),
       weight: load.weight?.toNumber(),
       loadImages: load.loadImage.map(
-        (image) => `https://truckz-test.s3.amazonaws.com/${image.url}`,
+        (image) => `${storageBaseUrl}/${image.url}`,
       ),
       pickupAddress: {
         ...load.pickupAddress,
@@ -90,8 +93,8 @@ export async function findLoads(
         user,
         contractorMainAddress,
       ] = await Promise.all([
-        AddressRepository.findById(load.pickup_address_id),
-        AddressRepository.findById(load.delivery_address_id),
+        LoadAddressRepository.findById(load.pickup_address_id),
+        LoadAddressRepository.findById(load.delivery_address_id),
         LoadImageRepository.findMany({
           where: {
             loadId: load.id,
@@ -141,9 +144,7 @@ export async function findLoads(
         createdAt: load.created_at,
         seenTimes: load.seen_times,
         contractorId: load.contractor_id,
-        loadImages: loadImages.map(
-          (image) => `https://truckz-test.s3.amazonaws.com/${image.url}`,
-        ),
+        loadImages: loadImages.map((image) => `${storageBaseUrl}/${image.url}`),
         pickupAddressId: load.pickup_address_id,
         pickupDate: load.pickup_date,
         pickupAddress: {
@@ -158,7 +159,6 @@ export async function findLoads(
           city: pickupAddress.city,
           latitude: pickupAddress.latitude.toNumber(),
           longitude: pickupAddress.longitude.toNumber(),
-          userId: pickupAddress.userId,
         },
         deliveryAddressId: load.delivery_address_id,
         deliveryDate: load.delivery_date,
@@ -174,7 +174,6 @@ export async function findLoads(
           city: deliveryAddress.city,
           latitude: deliveryAddress.latitude.toNumber(),
           longitude: deliveryAddress.longitude.toNumber(),
-          userId: deliveryAddress.userId,
         },
         contractor: {
           id: contractor.id,
@@ -185,7 +184,7 @@ export async function findLoads(
           phoneNumber: contractor.phoneNumber,
           whatsappNumber: contractor.whatsappNumber,
           ...(user.avatarUrl && {
-            avatarUrl: `https://truckz-test.s3.amazonaws.com/${user.avatarUrl}`,
+            avatarUrl: `${storageBaseUrl}/${user.avatarUrl}`,
           }),
           createdAt: user.createdAt,
           mainAddress: {

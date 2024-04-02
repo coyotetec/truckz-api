@@ -2,6 +2,9 @@
 CREATE TYPE "TruckType" AS ENUM ('bau', 'bau_frigorifico', 'sider', 'cacamba', 'grade_baixa', 'graneleiro', 'prancha');
 
 -- CreateEnum
+CREATE TYPE "LoadType" AS ENUM ('full', 'complement', 'full_complement');
+
+-- CreateEnum
 CREATE TYPE "LoadStatus" AS ENUM ('active', 'cancelled', 'finished');
 
 -- CreateEnum
@@ -79,7 +82,7 @@ CREATE TABLE "truck" (
     "plate" TEXT NOT NULL,
     "crv_number" TEXT NOT NULL,
     "model" TEXT NOT NULL,
-    "holder_name" TEXT NOT NULL,
+    "holder_name" TEXT,
     "holder_cpf" VARCHAR(11),
     "holder_cnpj" VARCHAR(14),
     "type" "TruckType" NOT NULL,
@@ -108,6 +111,7 @@ CREATE TABLE "checkin" (
 CREATE TABLE "load" (
     "id" TEXT NOT NULL,
     "title" TEXT,
+    "type" "LoadType" NOT NULL DEFAULT 'full',
     "status" "LoadStatus" NOT NULL DEFAULT 'active',
     "price" DECIMAL(65,30) NOT NULL,
     "length" DECIMAL(65,30),
@@ -135,6 +139,23 @@ CREATE TABLE "load_image" (
     "load_id" TEXT NOT NULL,
 
     CONSTRAINT "load_image_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "load_address" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "zipcode" TEXT,
+    "address" TEXT NOT NULL,
+    "number" INTEGER,
+    "district" TEXT NOT NULL,
+    "reference" TEXT,
+    "state" TEXT NOT NULL,
+    "city" TEXT NOT NULL,
+    "latitude" DECIMAL(65,30) NOT NULL,
+    "longitude" DECIMAL(65,30) NOT NULL,
+
+    CONSTRAINT "load_address_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
@@ -177,10 +198,10 @@ ALTER TABLE "truck" ADD CONSTRAINT "truck_driver_id_fkey" FOREIGN KEY ("driver_i
 ALTER TABLE "checkin" ADD CONSTRAINT "checkin_driver_id_fkey" FOREIGN KEY ("driver_id") REFERENCES "driver"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "load" ADD CONSTRAINT "load_pickup_address_id_fkey" FOREIGN KEY ("pickup_address_id") REFERENCES "address"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "load" ADD CONSTRAINT "load_pickup_address_id_fkey" FOREIGN KEY ("pickup_address_id") REFERENCES "load_address"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "load" ADD CONSTRAINT "load_delivery_address_id_fkey" FOREIGN KEY ("delivery_address_id") REFERENCES "address"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "load" ADD CONSTRAINT "load_delivery_address_id_fkey" FOREIGN KEY ("delivery_address_id") REFERENCES "load_address"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "load" ADD CONSTRAINT "load_contractor_id_fkey" FOREIGN KEY ("contractor_id") REFERENCES "contractor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

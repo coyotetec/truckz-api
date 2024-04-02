@@ -37,6 +37,14 @@ class ContractorRepository {
       data,
     });
   }
+
+  deleteById(id: string) {
+    return prisma.contractor.delete({
+      where: {
+        id,
+      },
+    });
+  }
 }
 
 export default new ContractorRepository();

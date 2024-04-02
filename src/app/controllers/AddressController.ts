@@ -4,6 +4,7 @@ import { addressSchema } from '../schemas/addressSchemas';
 import { createAddress } from '../useCases/address/createAddress';
 import { findAddressById } from '../useCases/address/findAddressById';
 import { updateAddress } from '../useCases/address/updateAddress';
+import { deleteAddress } from '../useCases/address/deleteAddress';
 
 class AddressController {
   async index(req: Request, res: Response) {
@@ -50,6 +51,19 @@ class AddressController {
     });
 
     res.status(200).json(addressUpdated);
+  }
+
+  async destroy(req: Request, res: Response) {
+    const { userId } = req;
+    const { id } = req.params;
+
+    if (!userId) {
+      return res.sendStatus(500);
+    }
+
+    await deleteAddress(id, userId);
+
+    res.send(204);
   }
 }
 

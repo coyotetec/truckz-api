@@ -4,8 +4,12 @@ import UserRepository from '../../repositories/UserRepository';
 import DriverRepository from '../../repositories/DriverRepository';
 import { APPError } from '../../errors/APPError';
 import { hashPassword } from '../../../utils/hashPassword';
+import { uploadImage } from '../../../utils/uploadImage';
 
-export async function createDriver(payload: z.infer<typeof driverStoreSchema>) {
+export async function createDriver(
+  payload: z.infer<typeof driverStoreSchema>,
+  avatar?: Express.Multer.File,
+) {
   const userAlreadyExists = await UserRepository.findFirst({
     where: {
       OR: [{ username: payload.username }, { email: payload.email }],
@@ -33,10 +37,15 @@ export async function createDriver(payload: z.infer<typeof driverStoreSchema>) {
     ];
 
     throw new APPError(
-      `the following fields are already in user: ${sameFields.join(', ')}`,
+      `the following fields are already in use: ${sameFields.join(', ')}`,
     );
   }
 
+  const avatarFileName = avatar
+    ? await uploadImage(avatar, {
+        height: 200,
+      })
+    : '';
   const hashedPassword = await hashPassword(payload.password);
 
   const driver = await DriverRepository.create({
@@ -53,7 +62,7 @@ export async function createDriver(payload: z.infer<typeof driverStoreSchema>) {
         email: payload.email,
         username: payload.username,
         password: hashedPassword,
-        avatarUrl: '',
+        avatarUrl: avatarFileName,
         address: {
           create: {
             name: 'Endereço Principal',

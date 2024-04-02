@@ -18,6 +18,14 @@ export class TruckRepository {
   async update({ where, data }: IUpdateArgs) {
     return await prisma.truck.update({ where, data });
   }
+
+  deleteDriverTrucks(driverId: string) {
+    return prisma.truck.deleteMany({
+      where: {
+        driverId,
+      },
+    });
+  }
 }
 
 export default new TruckRepository();

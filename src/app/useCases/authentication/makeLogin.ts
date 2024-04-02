@@ -24,6 +24,8 @@ interface DriverResponse {
   };
 }
 
+const storageBaseUrl = process.env.STORAGE_BASE_URL as string;
+
 export async function makeLogin(data: z.infer<typeof loginSchema>) {
   const user = await UserRepository.findFirst({
     where: {
@@ -99,7 +101,7 @@ export async function makeLogin(data: z.infer<typeof loginSchema>) {
     user: {
       id: user.id,
       ...(user.avatarUrl && {
-        avatarUrl: `https://s3.amazonaws.com/truckz-test/${user.avatarUrl}`,
+        avatarUrl: `${storageBaseUrl}/${user.avatarUrl}`,
       }),
       ...(accountType === 'contractor' && {
         contractor,

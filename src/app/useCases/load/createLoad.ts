@@ -25,22 +25,22 @@ export async function createLoad(
     throw new APPError('contractor does not exists');
   }
 
-  const deliveryAddress = await findOrCreateAddress(
+  const deliveryAddressId = await findOrCreateAddress(
     payload.deliveryAddressId,
     payload.deliveryAddress && payload.deliveryAddress,
   );
-  const pickupAddress = await findOrCreateAddress(
+  const pickupAddressId = await findOrCreateAddress(
     payload.pickupAddressId,
     payload.pickupAddress && payload.pickupAddress,
   );
 
-  if (!deliveryAddress) {
+  if (!deliveryAddressId) {
     throw new APPError(
       'you need to inform a valid deliveryId or pass data to create a new one',
     );
   }
 
-  if (!pickupAddress) {
+  if (!pickupAddressId) {
     throw new APPError(
       'you need to inform a valid pickupAddress or pass data to create a new one',
     );
@@ -68,9 +68,9 @@ export async function createLoad(
     weight: payload.weight,
     weightUnit: payload.weightUnit,
     description: payload.description,
-    pickupAddressId: pickupAddress.id,
+    pickupAddressId,
     pickupDate: payload.pickupDate,
-    deliveryAddressId: deliveryAddress.id,
+    deliveryAddressId,
     deliveryDate: payload.deliveryDate,
     loadImage: {
       createMany: {
