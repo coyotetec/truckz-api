@@ -1,5 +1,8 @@
 import { z } from 'zod';
 import { truckSchema } from './truckSchemas';
+import { publicLoadsSchema } from './loadSchemas';
+
+export const publicDriversSchema = publicLoadsSchema;
 
 export const driverStoreSchema = z.object({
   fullName: z.string({

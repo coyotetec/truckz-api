@@ -1,11 +1,14 @@
 import { Request, Response } from 'express';
 import {
   driverStoreSchema,
+  publicDriversSchema,
   updateDriverSchema,
 } from '../schemas/driverSchemas';
 import { createDriver } from '../useCases/driver/createDriver';
 import { updateDriver } from '../useCases/driver/updateDriver';
 import { findDriverByUserId } from '../useCases/driver/findDriverByUserId';
+import { APPError } from '../errors/APPError';
+import { findPublicDrivers } from '../useCases/driver/findPublicDrivers';
 
 class DriverController {
   async show(req: Request, res: Response) {
@@ -52,6 +55,13 @@ class DriverController {
 
     const updatedDriver = await updateDriver(req.userId, dataToUpdate);
     res.status(200).json(updatedDriver);
+  }
+
+  async publicDrivers(req: Request, res: Response) {
+    const coordinates = publicDriversSchema.safeParse(req.query);
+    if (!coordinates.success) throw new APPError('Coordinates not found');
+    const drivers = await findPublicDrivers(coordinates.data);
+    return res.status(200).json(drivers);
   }
 }
 

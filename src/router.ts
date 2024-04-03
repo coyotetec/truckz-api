@@ -99,3 +99,4 @@ router.post(
 );
 
 router.get('/public/loads', LoadController.publicLoads);
+router.get('/public/drivers', DriverController.publicDrivers);
