@@ -97,3 +97,5 @@ router.post(
   '/authenticate/reset-password',
   AuthenticationController.resetPassword,
 );
+
+router.get('/public/loads', LoadController.publicLoads);

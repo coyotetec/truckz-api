@@ -3,12 +3,15 @@ import {
   loadCloseStatus,
   loadIndexSchema,
   loadStoreSchema,
+  publicLoadsSchema,
 } from '../schemas/loadSchemas';
 import { createLoad } from '../useCases/load/createLoad';
 import { findLoads } from '../useCases/load/findLoads';
 import { findLoadById } from '../useCases/load/findLoadById';
 import { closeLoad } from '../useCases/load/closeLoad';
 import { updateLoad } from '../useCases/load/updateLoad';
+import { APPError } from '../errors/APPError';
+import { findPublicLoads } from '../useCases/load/findPublicLoads';
 
 class LoadController {
   async index(req: Request, res: Response) {
@@ -133,6 +136,14 @@ class LoadController {
       req.files as Express.Multer.File[],
     );
     res.status(200).json(loadUpdated);
+  }
+
+  async publicLoads(req: Request, res: Response) {
+    const coordinates = publicLoadsSchema.safeParse(req.query);
+    if (!coordinates.success) throw new APPError('Coordinates not found');
+
+    const loads = await findPublicLoads(coordinates.data);
+    return res.status(200).json(loads);
   }
 }
 
