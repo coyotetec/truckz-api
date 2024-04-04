@@ -15,7 +15,9 @@ class UserController {
     const { id } = req.params;
 
     if (req.userId !== id) {
-      return res.status(401).json({ error: "you can't get this user data" });
+      return res.status(401).json({
+        error: 'Não é possível fazer esta operação sem o id do usuário',
+      });
     }
 
     const user = await findUserById(id);
@@ -50,7 +52,7 @@ class UserController {
     const password = req.body.password;
 
     if (!password) {
-      throw new APPError('password is a required field');
+      throw new APPError('Senha é um campo obrigatório');
     }
 
     await deleteUser(req.userId, password);

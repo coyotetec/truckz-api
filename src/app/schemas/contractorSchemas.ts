@@ -2,122 +2,122 @@ import { z } from 'zod';
 
 export const contractorStoreSchema = z.object({
   name: z.string({
-    required_error: 'name is a required field',
-    invalid_type_error: 'name must be a string',
+    required_error: 'nome é um campo obrigatório',
+    invalid_type_error: 'nome deve ser uma string',
   }),
   cnpj: z
     .string({
-      invalid_type_error: 'cnpj must be a string',
+      invalid_type_error: 'cnpj deve ser uma string',
     })
     .optional(),
   cpf: z
     .string({
-      invalid_type_error: 'cpf must be a string',
+      invalid_type_error: 'cpf deve ser uma string',
     })
     .optional(),
   stateRegistration: z.string({
-    required_error: 'stateRegistration is a required field',
-    invalid_type_error: 'stateRegistration must be a string',
+    required_error: 'registro estadual é um campo obrigatório',
+    invalid_type_error: 'registro estadual deve ser uma string',
   }),
   email: z
     .string({
-      required_error: 'email is a required field',
-      invalid_type_error: 'email must be a string',
+      required_error: 'email é um campo obrigatório',
+      invalid_type_error: 'email deve ser uma string',
     })
     .email({
-      message: 'email does not have the correct format',
+      message: 'email não tem o formato correto',
     }),
   phoneNumber: z.string({
-    required_error: 'phoneNumber is a required field',
-    invalid_type_error: 'phoneNumber must be a string',
+    required_error: 'número de telefone é um campo obrigatório',
+    invalid_type_error: 'número de telefone deve ser uma string',
   }),
   whatsappNumber: z
     .string({
-      invalid_type_error: 'whatsappNumber must be a string',
+      invalid_type_error: 'número do whatsapp deve ser uma string',
     })
     .optional(),
   username: z.string({
-    required_error: 'username is a required field',
-    invalid_type_error: 'username must be a string',
+    required_error: 'nome de usuário é um campo obrigatório',
+    invalid_type_error: 'nome de usuário deve ser uma string',
   }),
   password: z.string({
-    required_error: 'password is a required field',
-    invalid_type_error: 'password must be a string',
+    required_error: 'senha é um campo obrigatório',
+    invalid_type_error: 'senha deve ser uma string',
   }),
   address: z.object(
     {
       zipcode: z
         .string({
-          invalid_type_error: 'zipcode must be a string',
+          invalid_type_error: 'CEP deve ser uma string',
         })
         .optional(),
       address: z.string({
-        required_error: 'address.address is a required field',
-        invalid_type_error: 'address.address must be a string',
+        required_error: 'endereço é um campo obrigatório',
+        invalid_type_error: 'endereço deve ser uma string',
       }),
       number: z
         .number({
-          invalid_type_error: 'address.number must be a number',
+          invalid_type_error: 'número do endereço deve ser do tipo number',
         })
         .optional(),
       district: z.string({
-        required_error: 'address.district is a required field',
-        invalid_type_error: 'address.district must be a string',
+        required_error: 'bairro é um campo obrigatório',
+        invalid_type_error: 'bairro deve ser uma string',
       }),
       reference: z
         .string({
-          invalid_type_error: 'address.reference must be a string',
+          invalid_type_error: 'referência deve ser uma string',
         })
         .optional(),
       state: z.string({
-        required_error: 'address.state is a required field',
-        invalid_type_error: 'address.state must be a string',
+        required_error: 'estado é um campo obrigatório',
+        invalid_type_error: 'estado deve ser uma string',
       }),
       city: z.string({
-        required_error: 'address.city is a required field',
-        invalid_type_error: 'address.city must be a string',
+        required_error: 'cidade é um campo obrigatório',
+        invalid_type_error: 'cidade deve ser uma string',
       }),
       latitude: z.number({
-        required_error: 'address.latitude is a required field',
-        invalid_type_error: 'address.latitude must be a number',
+        required_error: 'latitude é um campo obrigatório',
+        invalid_type_error: 'latitude deve ser do tipo number',
       }),
       longitude: z.number({
-        required_error: 'address.longitude is a required field',
-        invalid_type_error: 'address.longitude must be a number',
+        required_error: 'longitude é um campo obrigatório',
+        invalid_type_error: 'longitude deve ser do tipo number',
       }),
     },
     {
-      required_error: 'address is a required field',
+      required_error: 'endereço é um campo obrigatório',
     },
   ),
 });
 
 export const updateContratorSchema = z.object({
   name: z.string({
-    required_error: 'name is a required field',
-    invalid_type_error: 'name must be a string',
+    required_error: 'nome  é um campo obrigatório',
+    invalid_type_error: 'nome deve ser uma string',
   }),
   cnpj: z
     .string({
-      invalid_type_error: 'cnpj must be a string',
+      invalid_type_error: 'cnpj deve ser uma string',
     })
     .optional(),
   cpf: z
     .string({
-      invalid_type_error: 'cpf must be a string',
+      invalid_type_error: 'cpf deve ser uma string',
     })
     .optional(),
   stateRegistration: z.string({
-    required_error: 'stateRegistration is a required field',
-    invalid_type_error: 'stateRegistration must be a string',
+    required_error: 'registro estadual é um campo obrigatório',
+    invalid_type_error: 'registro estadual deve ser uma string',
   }),
   phoneNumber: z.string({
-    required_error: 'phoneNumber is a required field',
-    invalid_type_error: 'phoneNumber must be a string',
+    required_error: 'número de telefone é um campo obrigatório',
+    invalid_type_error: 'número de telefone deve ser uma string',
   }),
   whatsappNumber: z
     .string({
-      invalid_type_error: 'whatsappNumber must be a string',
+      invalid_type_error: 'número do whatsapp deve ser uma string',
     })
     .optional(),
 });

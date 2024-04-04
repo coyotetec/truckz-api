@@ -9,7 +9,7 @@ export async function findDriverByUserId(userId: string) {
   });
 
   if (!driver) {
-    throw new APPError('driver does not exists');
+    throw new APPError('motorista não encontrado');
   }
 
   return driver;

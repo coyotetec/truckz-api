@@ -29,7 +29,7 @@ export async function updateLoad(
   });
 
   if (!load) {
-    throw new APPError('load does not exists');
+    throw new APPError('carga não encontrada');
   }
 
   const imagesDB = await LoadImageRepository.findMany({
@@ -93,13 +93,13 @@ export async function updateLoad(
 
   if (!deliveryAddressId) {
     throw new APPError(
-      'you need to inform a valid deliveryId or pass data to create a new one',
+      'você precisa informar um id de endereço de entrega ou passar os dados para criar um novo',
     );
   }
 
   if (!pickupAddressId) {
     throw new APPError(
-      'you need to inform a valid pickupAddress or pass data to create a new one',
+      'você precisa informar um id de endereço de coleta ou passar os dados para criar um novo',
     );
   }
 

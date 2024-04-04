@@ -24,7 +24,7 @@ export async function updateUser(
   });
 
   if (!user) {
-    throw new APPError('user does not exists');
+    throw new APPError('usuário não existe');
   }
 
   const { avatarUrl } = user;
@@ -42,7 +42,7 @@ export async function updateUser(
     ];
 
     throw new APPError(
-      `the following fields are already in use: ${sameFields.join(', ')}`,
+      `os seguintes campos já estão em uso: ${sameFields.join(', ')}`,
     );
   }
 

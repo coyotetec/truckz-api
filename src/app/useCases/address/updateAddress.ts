@@ -24,7 +24,7 @@ export async function updateAddress({
   });
 
   if (!address) {
-    throw new APPError('address does not exists');
+    throw new APPError('endereço não existe');
   }
 
   const addressUpdated = await AddressRepository.update({

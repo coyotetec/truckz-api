@@ -140,7 +140,11 @@ class LoadController {
 
   async publicLoads(req: Request, res: Response) {
     const coordinates = publicLoadsSchema.safeParse(req.query);
-    if (!coordinates.success) throw new APPError('Coordinates not found');
+    if (!coordinates.success) {
+      throw new APPError(
+        'Não é possível fazer essa operação sem as coordenadas',
+      );
+    }
 
     const loads = await findPublicLoads(coordinates.data);
     return res.status(200).json(loads);

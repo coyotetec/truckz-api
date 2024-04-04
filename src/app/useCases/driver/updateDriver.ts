@@ -15,7 +15,7 @@ export async function updateDriver(
     },
   });
 
-  if (!driver) throw new APPError('driver does not exists');
+  if (!driver) throw new APPError('motorista não encontrado');
 
   const driverAlreadyExists = await DriverRepository.findFirst({
     where: {
@@ -37,7 +37,7 @@ export async function updateDriver(
     ];
 
     throw new APPError(
-      `the following fields are already in user: ${sameFields.join(', ')}`,
+      `os seguintes campos já estão em uso: ${sameFields.join(', ')}`,
     );
   }
 
