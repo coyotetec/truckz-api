@@ -1,9 +1,14 @@
 import { z } from 'zod';
 import { addressSchema } from './addressSchemas';
 
+export const publicLoadsSchema = z.object({
+  lt: z.string({ required_error: 'latitude é obrigatória ' }).trim(),
+  lg: z.string({ required_error: 'longitude é obrigatório' }).trim(),
+});
+
 export const loadCloseStatus = z.enum(['cancelled', 'finished'], {
-  required_error: 'status is a required field',
-  invalid_type_error: 'status must be cancelled or finished',
+  required_error: 'status é um campo obrigatório',
+  invalid_type_error: 'status deve ser cancelado ou finalizado',
 });
 
 export const loadIndexSchema = z.object({
@@ -13,7 +18,7 @@ export const loadIndexSchema = z.object({
   destinationCity: z.string().optional(),
   radius: z
     .string({
-      invalid_type_error: 'radius must be a number',
+      invalid_type_error: 'raio deve ser do tipo number',
     })
     .optional()
     .default('250')
@@ -25,89 +30,92 @@ export const loadStoreSchema = z
   .object({
     title: z
       .string({
-        invalid_type_error: 'title must be a string',
+        invalid_type_error: 'título deve ser uma string',
       })
       .optional(),
     type: z.enum(['full', 'complement', 'full_complement'], {
-      invalid_type_error: 'type must be: full, complement, full_complement',
-      required_error: 'type is a required field',
+      invalid_type_error: 'tipo deve ser: full, complement, full_complement',
+      required_error: 'tipo é um campo obrigatório',
     }),
     price: z.number({
-      required_error: 'price is a required field',
-      invalid_type_error: 'price must be a number',
+      required_error: 'preço é um campo obrigatório',
+      invalid_type_error: 'preço deve ser do tipo number',
     }),
     length: z
       .number({
-        invalid_type_error: 'length must be a number',
+        invalid_type_error: 'comprimento deve ser do tipo number',
       })
       .optional(),
     width: z
       .number({
-        invalid_type_error: 'width must be a number',
+        invalid_type_error: 'largura deve ser do tipo number',
       })
       .optional(),
     height: z
       .number({
-        invalid_type_error: 'height must be a number',
+        invalid_type_error: 'altura deve ser do tipo number',
       })
       .optional(),
     dimensionsUnit: z
       .enum(['centimeters', 'meters'], {
-        invalid_type_error: 'dimensionsUnit must be: centimeters, meters',
+        invalid_type_error:
+          'unidade das dimensões deve ser: centimeters, meters',
       })
       .optional(),
     weight: z
       .number({
-        invalid_type_error: 'weight must be a number',
+        invalid_type_error: 'peso deve ser do tipo number',
       })
       .optional(),
     weightUnit: z
       .enum(['grams', 'kilograms', 'tons'], {
-        invalid_type_error: 'weightUnit must be: grams, kilograms, tons',
+        invalid_type_error: 'unidade do peso deve ser: grams, kilograms, tons',
       })
       .optional(),
     pickupAddressId: z
       .string({
-        invalid_type_error: 'pickupAddressId must be a string',
+        invalid_type_error: 'id do endereço de coleta deve ser uma string',
       })
       .uuid({
-        message: 'pickupAddressId must be a uuid',
+        message: 'id do endereço de coleta deve ter o formato uuid',
       })
       .optional(),
     description: z
       .string({
-        invalid_type_error: 'description must be a string',
+        invalid_type_error: 'descrição deve ser uma string',
       })
       .optional(),
     pickupAddress: addressSchema.optional(),
     pickupDate: z.coerce.date({
-      required_error: 'pickupDate is a required field',
-      invalid_type_error: 'pickupDate must be a date',
+      required_error: 'data da coleta é um campo obrigatório',
+      invalid_type_error: 'data da coleta deve ser do tipo date',
     }),
     deliveryAddressId: z
       .string({
-        invalid_type_error: 'deliveryAddressId must be a string',
+        invalid_type_error: 'id do endereço de entrega deve ser uma string',
       })
       .uuid({
-        message: 'deliveryAddress.id must be a uuid',
+        message: 'id do endereço de entrega deve ter o formato uuid',
       })
       .optional(),
     deliveryAddress: addressSchema.optional(),
     deliveryDate: z.coerce.date({
-      required_error: 'deliveryDate is a required field',
-      invalid_type_error: 'deliveryDate must be a date',
+      required_error: 'data da entrega é um campo obrigatório',
+      invalid_type_error: 'data da entrega deve ser do tipo date',
     }),
   })
   .superRefine((val, ctx) => {
     if (!val.deliveryAddressId && !val.deliveryAddress) {
       ctx.addIssue({
-        message: 'you need to send deliveryAddress or deliveryAddressId',
+        message:
+          'você precisa enviar endereço de entrega ou id do endereço de entrega',
         code: z.ZodIssueCode.custom,
       });
     }
     if (!val.pickupAddressId && !val.pickupAddress) {
       ctx.addIssue({
-        message: 'you need to send pickupAddress or pickupAddressId',
+        message:
+          'você precisa enviar o endereço de coleta ou o id do endereço de coleta',
         code: z.ZodIssueCode.custom,
       });
     }

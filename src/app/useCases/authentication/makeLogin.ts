@@ -48,20 +48,20 @@ export async function makeLogin(data: z.infer<typeof loginSchema>) {
   });
 
   if (!user) {
-    throw new APPError('user does not exists');
+    throw new APPError('usuário não existe');
   }
 
   const samePassword = await validatePassword(data.password, user.password);
 
   if (!samePassword) {
-    throw new APPError('incorrect password');
+    throw new APPError('senha incorreta');
   }
 
   const accountType = user.driver
     ? 'driver'
     : user.contractor
-    ? 'contractor'
-    : 'undefined';
+      ? 'contractor'
+      : 'undefined';
   const secret = process.env.JWT_SECRET as string;
   const token = jwt.sign(
     {

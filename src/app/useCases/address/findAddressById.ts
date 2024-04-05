@@ -5,7 +5,7 @@ export async function findAddressById(id: string) {
   const address = await AddressRepository.findById(id);
 
   if (!address) {
-    throw new APPError('address does not exists');
+    throw new APPError('endereço não existe');
   }
 
   return address;

@@ -37,7 +37,7 @@ export async function createDriver(
     ];
 
     throw new APPError(
-      `the following fields are already in use: ${sameFields.join(', ')}`,
+      `os seguintes campos já estão em uso: ${sameFields.join(', ')}`,
     );
   }
 

@@ -2,45 +2,45 @@ import { z } from 'zod';
 
 export const addressSchema = z.object({
   name: z.string({
-    required_error: 'name is a required field',
+    required_error: 'Nome é um campo obrigatório',
   }),
   zipcode: z
     .string({
-      invalid_type_error: 'zipcode must be a string',
+      invalid_type_error: 'CEP deve ser uma string',
     })
     .optional(),
   address: z.string({
-    required_error: 'address is a required field',
-    invalid_type_error: 'address must be a string',
+    required_error: 'Endereço é um campo obrigatório',
+    invalid_type_error: 'Endereço deve ser uma string',
   }),
   number: z
     .number({
-      invalid_type_error: 'number must be a number',
+      invalid_type_error: 'Número deve ser do tipo number',
     })
     .optional(),
   district: z.string({
-    required_error: 'district is a required field',
-    invalid_type_error: 'district must be a string',
+    required_error: 'Bairro é um campo obrigatório',
+    invalid_type_error: 'Bairro deve ser uma string',
   }),
   reference: z
     .string({
-      invalid_type_error: 'reference must be a string',
+      invalid_type_error: 'Referência deve ser uma string',
     })
     .optional(),
   state: z.string({
-    required_error: 'state is a required field',
-    invalid_type_error: 'state must be a string',
+    required_error: 'Estado é um campo obrigatório',
+    invalid_type_error: 'Estado deve ser uma string',
   }),
   city: z.string({
-    required_error: 'city is a required field',
-    invalid_type_error: 'city must be a string',
+    required_error: 'Cidade é um campo obrigatório',
+    invalid_type_error: 'Cidade deve ser uma string',
   }),
   latitude: z.number({
-    required_error: 'latitude is a required field',
-    invalid_type_error: 'latitude must be a number',
+    required_error: 'latitude é um campo obrigatório',
+    invalid_type_error: 'latitude deve ser um número',
   }),
   longitude: z.number({
-    required_error: 'longitude is a required field',
-    invalid_type_error: 'longitude must be a number',
+    required_error: 'longitude é um campo obrigatório',
+    invalid_type_error: 'longitude deve ser um número',
   }),
 });

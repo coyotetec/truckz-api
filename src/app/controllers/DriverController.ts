@@ -1,11 +1,14 @@
 import { Request, Response } from 'express';
 import {
   driverStoreSchema,
+  publicDriversSchema,
   updateDriverSchema,
 } from '../schemas/driverSchemas';
 import { createDriver } from '../useCases/driver/createDriver';
 import { updateDriver } from '../useCases/driver/updateDriver';
 import { findDriverByUserId } from '../useCases/driver/findDriverByUserId';
+import { APPError } from '../errors/APPError';
+import { findPublicDrivers } from '../useCases/driver/findPublicDrivers';
 
 class DriverController {
   async show(req: Request, res: Response) {
@@ -16,7 +19,9 @@ class DriverController {
     const { userId } = req.params;
 
     if (req.userId !== userId) {
-      return res.status(401).json({ error: "you can't get this user data" });
+      return res.status(401).json({
+        error: 'Não é possível fazer esta operação sem o id do usuário',
+      });
     }
 
     const driver = await findDriverByUserId(userId);
@@ -52,6 +57,17 @@ class DriverController {
 
     const updatedDriver = await updateDriver(req.userId, dataToUpdate);
     res.status(200).json(updatedDriver);
+  }
+
+  async publicDrivers(req: Request, res: Response) {
+    const coordinates = publicDriversSchema.safeParse(req.query);
+    if (!coordinates.success) {
+      throw new APPError(
+        'Não é possível fazer essa operação sem as coordenadas',
+      );
+    }
+    const drivers = await findPublicDrivers(coordinates.data);
+    return res.status(200).json(drivers);
   }
 }
 

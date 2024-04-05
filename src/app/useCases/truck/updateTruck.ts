@@ -16,7 +16,7 @@ export async function updateTruck(
     },
   });
 
-  if (!truck) throw new Error('truck does not exists');
+  if (!truck) throw new Error('caminhão não existe');
 
   const truckAlreadyExists = await TruckRepository.findFirst({
     where: {
@@ -38,7 +38,7 @@ export async function updateTruck(
     ];
 
     throw new APPError(
-      `the following fields are already in user: ${sameFields.join(', ')}`,
+      `os seguintes campos já estão em uso: ${sameFields.join(', ')}`,
     );
   }
 

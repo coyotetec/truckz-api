@@ -9,7 +9,7 @@ import { deleteAddress } from '../useCases/address/deleteAddress';
 class AddressController {
   async index(req: Request, res: Response) {
     if (!req.userId) {
-      return res.sendStatus(404);
+      return res.sendStatus(500);
     }
 
     const addresses = await findAddresses(req.userId);
@@ -27,7 +27,7 @@ class AddressController {
 
   async store(req: Request, res: Response) {
     if (!req.userId) {
-      return res.sendStatus(404);
+      return res.sendStatus(500);
     }
 
     const data = addressSchema.parse(req.body);

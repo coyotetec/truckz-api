@@ -1,191 +1,140 @@
 import { z } from 'zod';
+import { truckSchema } from './truckSchemas';
+import { publicLoadsSchema } from './loadSchemas';
+
+export const publicDriversSchema = publicLoadsSchema;
 
 export const driverStoreSchema = z.object({
   fullName: z.string({
-    required_error: 'fullName is a required field',
-    invalid_type_error: 'fullName must be a string',
+    required_error: 'nome completo é um campo obrigatório',
+    invalid_type_error: 'nome completo deve ser uma string',
   }),
   birthDate: z.coerce.date({
-    required_error: 'birthDate is a required field',
-    invalid_type_error: 'birthDate must be a date',
+    required_error: 'data de nascimento é um campo obrigatório',
+    invalid_type_error: 'data de nascimento must be a date',
   }),
   cpf: z.string({
-    required_error: 'cpf is a required field',
-    invalid_type_error: 'cpf must be a string',
+    required_error: 'cpf é um campo obrigatório',
+    invalid_type_error: 'cpf deve ser uma string',
   }),
   cnhNumber: z.string({
-    required_error: 'cnhNumber is a required field',
-    invalid_type_error: 'cnhNumber must be a string',
+    required_error: 'número da cnh é um campo obrigatório',
+    invalid_type_error: 'número da cnh deve ser uma string',
   }),
   cnhCategory: z.string({
-    required_error: 'cnhCategory is a required field',
-    invalid_type_error: 'cnhCategory must be a string',
+    required_error: 'categoria da cnh é um campo obrigatório',
+    invalid_type_error: 'categoria da cnh deve ser uma string',
   }),
   rntrc: z.string({
-    required_error: 'rntrc is a required field',
-    invalid_type_error: 'rntrc must be a string',
+    required_error: 'rntrc é um campo obrigatório',
+    invalid_type_error: 'rntrc deve ser uma string',
   }),
   email: z
     .string({
-      required_error: 'email is a required field',
-      invalid_type_error: 'email must be a string',
+      required_error: 'email é um campo obrigatório',
+      invalid_type_error: 'email deve ser uma string',
     })
     .email({
-      message: 'email does not have the correct format',
+      message: 'email não está no formato correto',
     }),
   phoneNumber: z.string({
-    required_error: 'phoneNumber is a required field',
-    invalid_type_error: 'phoneNumber must be a string',
+    required_error: 'número de telefone é um campo obrigatório',
+    invalid_type_error: 'número de telefone deve ser uma string',
   }),
   whatsappNumber: z
     .string({
-      invalid_type_error: 'whatsappNumber must be a string',
+      invalid_type_error: 'número do whatsapp deve ser uma string',
     })
     .optional(),
   username: z.string({
-    required_error: 'username is a required field',
-    invalid_type_error: 'username must be a string',
+    required_error: 'nome de usuário é um campo obrigatório',
+    invalid_type_error: 'nome de usuário deve ser uma string',
   }),
   password: z.string({
-    required_error: 'password is a required field',
-    invalid_type_error: 'password must be a string',
+    required_error: 'senha é um campo obrigatório',
+    invalid_type_error: 'senha deve ser uma string',
   }),
-  truck: z.object(
-    {
-      renavam: z.string({
-        required_error: 'truck.renavam is a required field',
-        invalid_type_error: 'truck.renavam must be a string',
-      }),
-      plate: z.string({
-        required_error: 'truck.plate is a required field',
-        invalid_type_error: 'truck.plate must be a string',
-      }),
-      crvNumber: z.string({
-        required_error: 'truck.crvNumber is a required field',
-        invalid_type_error: 'truck.crvNumber must be a string',
-      }),
-      model: z.string({
-        required_error: 'truck.model is a required field',
-        invalid_type_error: 'truck.model must be a string',
-      }),
-      holderName: z
-        .string({
-          required_error: 'truck.holderName is a required field',
-          invalid_type_error: 'truck.holderName must be a string',
-        })
-        .optional(),
-      holderCpf: z
-        .string({
-          invalid_type_error: 'truck.holderCpf must be a string',
-        })
-        .optional(),
-      holderCnpj: z
-        .string({
-          invalid_type_error: 'truck.holderCnpj must be a string',
-        })
-        .optional(),
-      type: z.enum([
-        'bau',
-        'bau_frigorifico',
-        'sider',
-        'cacamba',
-        'grade_baixa',
-        'graneleiro',
-        'prancha',
-      ]),
-      axlesQty: z.number({
-        required_error: 'truck.axlesQty is a required field',
-        invalid_type_error: 'truck.axlesQty must be a number',
-      }),
-      tracker: z.boolean({
-        required_error: 'truck.tracker is a required field',
-        invalid_type_error: 'truck.tracker must be a boolean',
-      }),
-    },
-    {
-      required_error: 'truck is a required field',
-    },
-  ),
+  truck: truckSchema,
   address: z.object(
     {
       zipcode: z
         .string({
-          invalid_type_error: 'zipcode must be a string',
+          invalid_type_error: 'CEP deve ser uma string',
         })
         .optional(),
       address: z.string({
-        required_error: 'address.address is a required field',
-        invalid_type_error: 'address.address must be a string',
+        required_error: 'endereço é um campo obrigatório',
+        invalid_type_error: 'endereço deve ser uma string',
       }),
       number: z
         .number({
-          invalid_type_error: 'address.number must be a number',
+          invalid_type_error: 'número do endereço must be a number',
         })
         .optional(),
       district: z.string({
-        required_error: 'address.district is a required field',
-        invalid_type_error: 'address.district must be a string',
+        required_error: 'bairro é um campo obrigatório',
+        invalid_type_error: 'bairro deve ser uma string',
       }),
       reference: z
         .string({
-          invalid_type_error: 'address.reference must be a string',
+          invalid_type_error: 'referência deve ser uma string',
         })
         .optional(),
       state: z.string({
-        required_error: 'address.state is a required field',
-        invalid_type_error: 'address.state must be a string',
+        required_error: 'estado é um campo obrigatório',
+        invalid_type_error: 'estado deve ser uma string',
       }),
       city: z.string({
-        required_error: 'address.city is a required field',
-        invalid_type_error: 'address.city must be a string',
+        required_error: 'cidade é um campo obrigatório',
+        invalid_type_error: 'cidade deve ser uma string',
       }),
       latitude: z.number({
-        required_error: 'address.latitude is a required field',
-        invalid_type_error: 'address.latitude must be a number',
+        required_error: 'latitude é um campo obrigatório',
+        invalid_type_error: 'latitude must be a number',
       }),
       longitude: z.number({
-        required_error: 'address.longitude is a required field',
-        invalid_type_error: 'address.longitude must be a number',
+        required_error: 'longitude é um campo obrigatório',
+        invalid_type_error: 'longitude must be a number',
       }),
     },
     {
-      required_error: 'address is a required field',
+      required_error: 'endereço é um campo obrigatório',
     },
   ),
 });
 
 export const updateDriverSchema = z.object({
   fullName: z.string({
-    required_error: 'fullName is a required field',
-    invalid_type_error: 'fullName must be a string',
+    required_error: 'nome completo é um campo obrigatório',
+    invalid_type_error: 'nome completo deve ser uma string',
   }),
   birthDate: z.coerce.date({
-    required_error: 'birthDate is a required field',
-    invalid_type_error: 'birthDate must be a date',
+    required_error: 'data de nascimento é um campo obrigatório',
+    invalid_type_error: 'data de nascimento must be a date',
   }),
   cpf: z.string({
-    required_error: 'cpf is a required field',
-    invalid_type_error: 'cpf must be a string',
+    required_error: 'cpf é um campo obrigatório',
+    invalid_type_error: 'cpf deve ser uma string',
   }),
   cnhNumber: z.string({
-    required_error: 'cnhNumber is a required field',
-    invalid_type_error: 'cnhNumber must be a string',
+    required_error: 'número da cnh é um campo obrigatório',
+    invalid_type_error: 'número da cnh deve ser uma string',
   }),
   cnhCategory: z.string({
-    required_error: 'cnhCategory is a required field',
-    invalid_type_error: 'cnhCategory must be a string',
+    required_error: 'categoria da cnh é um campo obrigatório',
+    invalid_type_error: 'categoria da cnh deve ser uma string',
   }),
   rntrc: z.string({
-    required_error: 'rntrc is a required field',
-    invalid_type_error: 'rntrc must be a string',
+    required_error: 'rntrc é um campo obrigatório',
+    invalid_type_error: 'rntrc deve ser uma string',
   }),
   phoneNumber: z.string({
-    required_error: 'phoneNumber is a required field',
-    invalid_type_error: 'phoneNumber must be a string',
+    required_error: 'número de telefone é um campo obrigatório',
+    invalid_type_error: 'número de telefone deve ser uma string',
   }),
   whatsappNumber: z
     .string({
-      invalid_type_error: 'whatsappNumber must be a string',
+      invalid_type_error: 'número do whatsapp deve ser uma string',
     })
     .optional(),
 });

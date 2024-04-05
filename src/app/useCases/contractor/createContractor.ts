@@ -35,7 +35,7 @@ export async function createContractor(
     ];
 
     throw new APPError(
-      `the following fields are already in use: ${sameFields.join(', ')}`,
+      `os seguintes campos já estão em uso: ${sameFields.join(', ')}`,
     );
   }
 

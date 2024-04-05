@@ -18,7 +18,7 @@ export async function updateContractor(
   });
 
   if (!contractor) {
-    throw new APPError('contractor does not exists');
+    throw new APPError('contratante não encontrado');
   }
 
   const contractorAlreadyExists = await ContractorRepository.findFirst({
@@ -41,11 +41,12 @@ export async function updateContractor(
     ];
 
     throw new APPError(
-      `the following fields are already in use: ${sameFields.join(', ')}`,
+      `os seguintes campos já estão em uso: ${sameFields.join(', ')}`,
     );
   }
 
   const { contractorId } = contractor;
+
   const contractorUpdated = await ContractorRepository.update({
     where: {
       id: contractorId || undefined,

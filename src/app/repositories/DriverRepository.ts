@@ -9,6 +9,11 @@ interface IUpdateArgs {
   data: Prisma.XOR<Prisma.DriverUpdateInput, Prisma.DriverUncheckedUpdateInput>;
 }
 
+interface IFindPublicDriversArgs {
+  lt: string;
+  lg: string;
+}
+
 class DriverRepository {
   async create(
     data: Prisma.XOR<
@@ -40,6 +45,25 @@ class DriverRepository {
         id,
       },
     });
+  }
+
+  findPublic({ lg, lt }: IFindPublicDriversArgs) {
+    return prisma.$queryRawUnsafe(`SELECT
+	c.*,
+	d.full_name,
+	d.phone_number,
+	d.whatsapp_number,
+	u.avatar_url,
+	6371 * 2 * asin(sqrt(
+      power(sin(radians(c.latitude - ${lt}) / 2), 2) +
+       cos(radians(${lt})) * cos(radians(c.latitude)) *
+      power(sin(radians(c.longitude - ${lg}) / 2), 2)
+    )) as distance
+FROM checkin c
+LEFT JOIN driver d ON c.driver_id = d.id
+LEFT JOIN "user" u ON d.user_id = u.id
+WHERE c.active = true
+ORDER BY distance`);
   }
 }
 

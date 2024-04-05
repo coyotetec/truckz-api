@@ -11,7 +11,7 @@ export async function findUserById(id: string) {
   });
 
   if (!user) {
-    throw new APPError('user does not exists');
+    throw new APPError('Usuário não existe');
   }
 
   const mappedUser = {

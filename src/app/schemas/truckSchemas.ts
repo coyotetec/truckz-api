@@ -2,33 +2,33 @@ import { z } from 'zod';
 
 export const truckSchema = z.object({
   renavam: z.string({
-    required_error: 'truck.renavam is a required field',
-    invalid_type_error: 'truck.renavam must be a string',
+    required_error: 'renavam é um campo obrigatório',
+    invalid_type_error: 'renavam deve ser uma string',
   }),
   plate: z.string({
-    required_error: 'truck.plate is a required field',
-    invalid_type_error: 'truck.plate must be a string',
+    required_error: 'placa é um campo obrigatório',
+    invalid_type_error: 'placa deve ser uma string',
   }),
   crvNumber: z.string({
-    required_error: 'truck.crvNumber is a required field',
-    invalid_type_error: 'truck.crvNumber must be a string',
+    required_error: 'crv é um campo obrigatório',
+    invalid_type_error: 'crv deve ser uma string',
   }),
   model: z.string({
-    required_error: 'truck.model is a required field',
-    invalid_type_error: 'truck.model must be a string',
+    required_error: 'modelo é um campo obrigatório',
+    invalid_type_error: 'modelo deve ser uma string',
   }),
   holderName: z.string({
-    required_error: 'truck.holderName is a required field',
-    invalid_type_error: 'truck.holderName must be a string',
+    required_error: 'nome do titular é um campo obrigatório',
+    invalid_type_error: 'nome do titular deve ser uma string',
   }),
   holderCpf: z
     .string({
-      invalid_type_error: 'truck.holderCpf must be a string',
+      invalid_type_error: 'cpf do titular deve ser uma string',
     })
     .optional(),
   holderCnpj: z
     .string({
-      invalid_type_error: 'truck.holderCnpj must be a string',
+      invalid_type_error: 'cnpj do titular deve ser uma string',
     })
     .optional(),
   type: z.enum([
@@ -41,11 +41,11 @@ export const truckSchema = z.object({
     'prancha',
   ]),
   axlesQty: z.number({
-    required_error: 'truck.axlesQty is a required field',
-    invalid_type_error: 'truck.axlesQty must be a number',
+    required_error: 'quantidade de eixos é um campo obrigatório',
+    invalid_type_error: 'quantidade de eixos deve ser do tipo number',
   }),
   tracker: z.boolean({
-    required_error: 'truck.tracker is a required field',
-    invalid_type_error: 'truck.tracker must be a boolean',
+    required_error: 'rastreador é um campo obrigatório',
+    invalid_type_error: 'rastreador deve ser do tipo boolean',
   }),
 });

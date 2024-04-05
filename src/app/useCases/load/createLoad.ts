@@ -22,7 +22,7 @@ export async function createLoad(
   });
 
   if (!contractor) {
-    throw new APPError('contractor does not exists');
+    throw new APPError('contratante não encontrado');
   }
 
   const deliveryAddressId = await findOrCreateAddress(
@@ -36,13 +36,13 @@ export async function createLoad(
 
   if (!deliveryAddressId) {
     throw new APPError(
-      'you need to inform a valid deliveryId or pass data to create a new one',
+      'você precisa informar um id de endereço de entrega ou passar os dados para criar um novo',
     );
   }
 
   if (!pickupAddressId) {
     throw new APPError(
-      'you need to inform a valid pickupAddress or pass data to create a new one',
+      'você precisa informar um id de endereço de coleta ou passar os dados para criar um novo',
     );
   }
 

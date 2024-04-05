@@ -20,13 +20,13 @@ export async function deleteUser(id: string, password: string) {
   });
 
   if (!user) {
-    throw new APPError('user does not exists');
+    throw new APPError('usuário não encontrado');
   }
 
   const samePassword = await validatePassword(password, user.password);
 
   if (!samePassword) {
-    throw new APPError('incorrect password');
+    throw new APPError('Senha incorreta');
   }
 
   if (user.driver) {
