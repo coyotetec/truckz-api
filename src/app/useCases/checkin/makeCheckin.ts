@@ -17,7 +17,7 @@ export async function makeCheckin(
   });
 
   if (!driver) {
-    throw new APPError('motorista não encontrado');
+    throw new APPError('Motorista não encontrado');
   }
 
   await CheckinRepository.disableAll(driver.id);

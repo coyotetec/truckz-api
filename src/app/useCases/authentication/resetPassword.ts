@@ -15,7 +15,9 @@ export async function resetPassword(data: z.infer<typeof resetPasswordSchema>) {
   });
 
   if (!passwordResetToken) {
-    throw new APPError('token de redefinição de senha inválido ou expirado');
+    throw new APPError(
+      'Seu token está inválido ou expirado, tente solicitar novamente',
+    );
   }
 
   const tokenIsValid = await validatePassword(
@@ -24,7 +26,9 @@ export async function resetPassword(data: z.infer<typeof resetPasswordSchema>) {
   );
 
   if (!tokenIsValid) {
-    throw new APPError('token de redefinição de senha inválido ou expirado');
+    throw new APPError(
+      'Seu token está inválido ou expirado, tente solicitar novamente',
+    );
   }
 
   const hashedPassword = await hashPassword(data.password);

@@ -68,7 +68,7 @@ export async function findLoads(
     });
 
     if (!lastCheckin) {
-      throw new APPError('o motorista precisa ter o checkin ativo');
+      throw new APPError('É necessário ter um checkin ativo');
     }
 
     const loads = await LoadRepository.findClose({

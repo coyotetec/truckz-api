@@ -22,7 +22,7 @@ export async function createLoad(
   });
 
   if (!contractor) {
-    throw new APPError('contratante não encontrado');
+    throw new APPError('Contratante não encontrado');
   }
 
   const deliveryAddressId = await findOrCreateAddress(
@@ -35,15 +35,11 @@ export async function createLoad(
   );
 
   if (!deliveryAddressId) {
-    throw new APPError(
-      'você precisa informar um id de endereço de entrega ou passar os dados para criar um novo',
-    );
+    throw new APPError('Você precisa informar um endereço de entrega');
   }
 
   if (!pickupAddressId) {
-    throw new APPError(
-      'você precisa informar um id de endereço de coleta ou passar os dados para criar um novo',
-    );
+    throw new APPError('Você precisa informar endereço de coleta');
   }
 
   const loadFilesName = images

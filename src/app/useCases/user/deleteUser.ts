@@ -20,7 +20,7 @@ export async function deleteUser(id: string, password: string) {
   });
 
   if (!user) {
-    throw new APPError('usuário não encontrado');
+    throw new APPError('Usuário incorreto');
   }
 
   const samePassword = await validatePassword(password, user.password);

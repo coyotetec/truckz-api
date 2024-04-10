@@ -11,7 +11,7 @@ export async function findLoadById(id: string) {
   });
 
   if (!load) {
-    throw new APPError('carga não encontrada');
+    throw new APPError('Carga não encontrada');
   }
 
   const mappedLoad = {

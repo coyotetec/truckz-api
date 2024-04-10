@@ -18,7 +18,7 @@ export async function updateContractor(
   });
 
   if (!contractor) {
-    throw new APPError('contratante não encontrado');
+    throw new APPError('Contratante não encontrado');
   }
 
   const contractorAlreadyExists = await ContractorRepository.findFirst({
@@ -33,15 +33,15 @@ export async function updateContractor(
   ) {
     const sameFields = [
       ...(payload.cpf && contractorAlreadyExists?.cpf === payload.cpf
-        ? ['cpf']
+        ? ['CPF']
         : []),
       ...(payload.cnpj && contractorAlreadyExists?.cnpj === payload.cnpj
-        ? ['cnpj']
+        ? ['CNPJ']
         : []),
     ];
 
     throw new APPError(
-      `os seguintes campos já estão em uso: ${sameFields.join(', ')}`,
+      `Os seguintes campos já estão em uso: ${sameFields.join(', ')}`,
     );
   }
 

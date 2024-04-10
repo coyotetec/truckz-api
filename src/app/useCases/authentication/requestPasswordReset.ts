@@ -33,7 +33,7 @@ export async function requestPasswordReset(
   });
 
   if (!user) {
-    throw new APPError('usuário não existe');
+    throw new APPError('Usuário incorreto');
   }
 
   const resetTokenAlreadyExists = await ResetTokenRepository.findUnique({

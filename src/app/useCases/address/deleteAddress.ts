@@ -13,7 +13,7 @@ export async function deleteAddress(addressId: string, userId: string) {
   });
 
   if (!address) {
-    throw new APPError('endereço não existe');
+    throw new APPError('Endereço não existe');
   }
 
   const load = await LoadRepository.findFirst({
@@ -23,7 +23,7 @@ export async function deleteAddress(addressId: string, userId: string) {
   });
 
   if (load) {
-    throw new APPError('você não pode apagar esse endereço');
+    throw new APPError('Você não pode apagar esse endereço');
   }
 
   await AddressRepository.deleteById(addressId);

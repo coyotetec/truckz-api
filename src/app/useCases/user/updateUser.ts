@@ -24,7 +24,7 @@ export async function updateUser(
   });
 
   if (!user) {
-    throw new APPError('usuário não existe');
+    throw new APPError('Usuário não encontrado');
   }
 
   const { avatarUrl } = user;
@@ -37,12 +37,14 @@ export async function updateUser(
 
   if (userAlreadyExists && userAlreadyExists.id !== userId) {
     const sameFields = [
-      ...(userAlreadyExists?.email === payload.email ? ['email'] : []),
-      ...(userAlreadyExists?.username === payload.username ? ['username'] : []),
+      ...(userAlreadyExists?.email === payload.email ? ['Email'] : []),
+      ...(userAlreadyExists?.username === payload.username
+        ? ['Nome de Usuário']
+        : []),
     ];
 
     throw new APPError(
-      `os seguintes campos já estão em uso: ${sameFields.join(', ')}`,
+      `Os seguintes campos já estão em uso: ${sameFields.join(', ')}`,
     );
   }
 

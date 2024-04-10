@@ -22,7 +22,7 @@ export async function closeLoad(
   });
 
   if (!load) {
-    throw new APPError('carga não encontrada');
+    throw new APPError('Carga não encontrada');
   }
 
   await LoadRepository.updateUnique(loadId, {

@@ -11,7 +11,7 @@ export async function disableCheckin(userId: string) {
   });
 
   if (!driver) {
-    throw new APPError('motorista não encontrado');
+    throw new APPError('Motorista não encontrado');
   }
 
   cancelJob(userId);

@@ -10,7 +10,7 @@ export async function findCheckin(userId: string) {
   });
 
   if (!driver) {
-    throw new APPError('motorista não encontrado');
+    throw new APPError('Motorista não encontrado');
   }
 
   const checkin = await CheckinRepository.findFirst({

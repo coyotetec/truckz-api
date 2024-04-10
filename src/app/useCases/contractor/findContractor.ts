@@ -13,7 +13,7 @@ export async function findContractor(userId: string) {
   });
 
   if (!contractor) {
-    throw new APPError('constratante não encontrado');
+    throw new APPError('Contratante não encontrado');
   }
 
   return contractor;

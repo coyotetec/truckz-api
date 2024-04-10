@@ -15,7 +15,7 @@ export async function createAddress(
   });
 
   if (!user || !user.active) {
-    throw new APPError('usuário não existe ou não está ativo');
+    throw new APPError('Usuário não existe ou não está ativo');
   }
 
   const address = await AddressRepository.create({

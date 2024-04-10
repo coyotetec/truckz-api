@@ -27,17 +27,19 @@ export async function createDriver(
 
   if (driverAlreadyExists || userAlreadyExists) {
     const sameFields = [
-      ...(driverAlreadyExists?.cpf === payload.cpf ? ['cpf'] : []),
+      ...(driverAlreadyExists?.cpf === payload.cpf ? ['CPF'] : []),
       ...(driverAlreadyExists?.cnhNumber === payload.cnhNumber
-        ? ['cnhNumber']
+        ? ['Número daa CNH']
         : []),
-      ...(driverAlreadyExists?.rntrc === payload.rntrc ? ['rntrc'] : []),
-      ...(userAlreadyExists?.email === payload.email ? ['email'] : []),
-      ...(userAlreadyExists?.username === payload.username ? ['username'] : []),
+      ...(driverAlreadyExists?.rntrc === payload.rntrc ? ['RNTRC'] : []),
+      ...(userAlreadyExists?.email === payload.email ? ['Email'] : []),
+      ...(userAlreadyExists?.username === payload.username
+        ? ['Nome de Usuário']
+        : []),
     ];
 
     throw new APPError(
-      `os seguintes campos já estão em uso: ${sameFields.join(', ')}`,
+      `Os seguintes campos já estão em uso: ${sameFields.join(', ')}`,
     );
   }
 

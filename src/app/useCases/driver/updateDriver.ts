@@ -15,7 +15,7 @@ export async function updateDriver(
     },
   });
 
-  if (!driver) throw new APPError('motorista não encontrado');
+  if (!driver) throw new APPError('Motorista não encontrado');
 
   const driverAlreadyExists = await DriverRepository.findFirst({
     where: {
@@ -29,15 +29,15 @@ export async function updateDriver(
 
   if (driverAlreadyExists && driver.id !== driverAlreadyExists.id) {
     const sameFields = [
-      ...(driverAlreadyExists?.cpf === payload.cpf ? ['cpf'] : []),
+      ...(driverAlreadyExists?.cpf === payload.cpf ? ['CPF'] : []),
       ...(driverAlreadyExists?.cnhNumber === payload.cnhNumber
-        ? ['cnhNumber']
+        ? ['Número da CNH']
         : []),
-      ...(driverAlreadyExists?.rntrc === payload.rntrc ? ['rntrc'] : []),
+      ...(driverAlreadyExists?.rntrc === payload.rntrc ? ['RNTRC'] : []),
     ];
 
     throw new APPError(
-      `os seguintes campos já estão em uso: ${sameFields.join(', ')}`,
+      `Os seguintes campos já estão em uso: ${sameFields.join(', ')}`,
     );
   }
 

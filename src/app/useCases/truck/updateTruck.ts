@@ -30,15 +30,15 @@ export async function updateTruck(
 
   if (truckAlreadyExists && truckId !== truckAlreadyExists.id) {
     const sameFields = [
-      ...(truckAlreadyExists?.renavam === payload.renavam ? ['renavam'] : []),
-      ...(truckAlreadyExists?.plate === payload.plate ? ['plate'] : []),
+      ...(truckAlreadyExists?.renavam === payload.renavam ? ['Renavam'] : []),
+      ...(truckAlreadyExists?.plate === payload.plate ? ['Placa'] : []),
       ...(truckAlreadyExists?.crvNumber === payload.crvNumber
-        ? ['crvNumber']
+        ? ['Número do CRV']
         : []),
     ];
 
     throw new APPError(
-      `os seguintes campos já estão em uso: ${sameFields.join(', ')}`,
+      `Os seguintes campos já estão em uso: ${sameFields.join(', ')}`,
     );
   }
 
