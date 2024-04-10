@@ -7,6 +7,7 @@ import {
 import { makeLogin } from '../useCases/authentication/makeLogin';
 import { requestPasswordReset } from '../useCases/authentication/requestPasswordReset';
 import { resetPassword } from '../useCases/authentication/resetPassword';
+import { deleteAccount } from '../useCases/authentication/deleteAccount';
 
 class AuthenticationController {
   async index(req: Request, res: Response) {
@@ -29,6 +30,14 @@ class AuthenticationController {
     const data = resetPasswordSchema.parse(req.body);
 
     await resetPassword(data);
+
+    res.sendStatus(200);
+  }
+
+  async deleteAccount(req: Request, res: Response) {
+    const data = loginSchema.parse(req.body);
+
+    await deleteAccount(data);
 
     res.sendStatus(200);
   }
