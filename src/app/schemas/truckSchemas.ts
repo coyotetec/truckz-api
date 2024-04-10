@@ -17,10 +17,11 @@ export const truckSchema = z.object({
     required_error: 'modelo é um campo obrigatório',
     invalid_type_error: 'modelo deve ser uma string',
   }),
-  holderName: z.string({
-    required_error: 'nome do titular é um campo obrigatório',
-    invalid_type_error: 'nome do titular deve ser uma string',
-  }),
+  holderName: z
+    .string({
+      invalid_type_error: 'nome do titular deve ser uma string',
+    })
+    .optional(),
   holderCpf: z
     .string({
       invalid_type_error: 'cpf do titular deve ser uma string',
