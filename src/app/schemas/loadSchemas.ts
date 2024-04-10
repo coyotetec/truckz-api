@@ -2,8 +2,8 @@ import { z } from 'zod';
 import { addressSchema } from './addressSchemas';
 
 export const publicLoadsSchema = z.object({
-  lt: z.string({ required_error: 'latitude é obrigatória ' }).trim(),
-  lg: z.string({ required_error: 'longitude é obrigatório' }).trim(),
+  lat: z.string({ required_error: 'latitude é obrigatória' }).trim(),
+  lng: z.string({ required_error: 'longitude é obrigatório' }).trim(),
 });
 
 export const loadCloseStatus = z.enum(['cancelled', 'finished'], {

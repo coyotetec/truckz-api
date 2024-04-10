@@ -1,8 +1,10 @@
 import { z } from 'zod';
 import { truckSchema } from './truckSchemas';
-import { publicLoadsSchema } from './loadSchemas';
 
-export const publicDriversSchema = publicLoadsSchema;
+export const publicDriversSchema = z.object({
+  lat: z.string({ required_error: 'latitude é obrigatória' }).trim(),
+  lng: z.string({ required_error: 'longitude é obrigatório' }).trim(),
+});
 
 export const driverStoreSchema = z.object({
   fullName: z.string({

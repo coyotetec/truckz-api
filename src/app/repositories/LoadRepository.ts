@@ -22,8 +22,8 @@ interface IUpdateArgs {
 }
 
 interface IFindPublicLoadsArgs {
-  lt: string;
-  lg: string;
+  lat: string;
+  lng: string;
 }
 
 interface FindCloseQueryResponse {
@@ -124,20 +124,21 @@ class LoadRepository {
     });
   }
 
-  findPublic({ lt, lg }: IFindPublicLoadsArgs) {
-    return prisma.$queryRawUnsafe(`
-  SELECT
-    l.*,
-    6371 * 2 * asin(sqrt(
-        power(sin(radians(pa.latitude - ${lt}) / 2), 2) +
-        cos(radians(${lt})) * cos(radians(pa.latitude)) *
-        power(sin(radians(pa.longitude - ${lg}) / 2), 2)
-    )) as distance
-  FROM load l
-  LEFT JOIN load_address pa on l.pickup_address_id = pa.id
-  LEFT JOIN load_address da on l.delivery_address_id = da.id
-  WHERE l.status = 'active'
-  ORDER BY distance`);
+  findPublic({ lat, lng }: IFindPublicLoadsArgs) {
+    return prisma.$queryRawUnsafe<FindCloseQueryResponse[]>(`
+      SELECT
+        l.*,
+        6371 * 2 * asin(sqrt(
+          power(sin(radians(pa.latitude - ${lat}) / 2), 2) +
+          cos(radians(${lat})) * cos(radians(pa.latitude)) *
+          power(sin(radians(pa.longitude - ${lng}) / 2), 2)
+        )) as distance
+      FROM load l
+      LEFT JOIN load_address pa on l.pickup_address_id = pa.id
+      LEFT JOIN load_address da on l.delivery_address_id = da.id
+      WHERE l.status = 'active'
+      ORDER BY distance
+    `);
   }
 
   async update({ where, data }: IUpdateArgs) {

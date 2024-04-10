@@ -10,8 +10,24 @@ interface IUpdateArgs {
 }
 
 interface IFindPublicDriversArgs {
-  lt: string;
-  lg: string;
+  lat: string;
+  lng: string;
+}
+
+interface IFindPublicQueryResponse {
+  id: string;
+  active: boolean;
+  latitude: Prisma.Decimal;
+  longitude: Prisma.Decimal;
+  city: string;
+  state: string;
+  checkin_at: Date;
+  driver_id: string;
+  full_name: string;
+  phone_number: string;
+  whatsapp_number: string;
+  avatar_url: string;
+  distance: number;
 }
 
 class DriverRepository {
@@ -47,23 +63,25 @@ class DriverRepository {
     });
   }
 
-  findPublic({ lg, lt }: IFindPublicDriversArgs) {
-    return prisma.$queryRawUnsafe(`SELECT
-	c.*,
-	d.full_name,
-	d.phone_number,
-	d.whatsapp_number,
-	u.avatar_url,
-	6371 * 2 * asin(sqrt(
-      power(sin(radians(c.latitude - ${lt}) / 2), 2) +
-       cos(radians(${lt})) * cos(radians(c.latitude)) *
-      power(sin(radians(c.longitude - ${lg}) / 2), 2)
-    )) as distance
-FROM checkin c
-LEFT JOIN driver d ON c.driver_id = d.id
-LEFT JOIN "user" u ON d.user_id = u.id
-WHERE c.active = true
-ORDER BY distance`);
+  findPublic({ lng, lat }: IFindPublicDriversArgs) {
+    return prisma.$queryRawUnsafe<IFindPublicQueryResponse[]>(`
+      SELECT
+        c.*,
+        d.full_name,
+        d.phone_number,
+        d.whatsapp_number,
+        u.avatar_url,
+        6371 * 2 * asin(sqrt(
+          power(sin(radians(c.latitude - ${lat}) / 2), 2) +
+          cos(radians(${lat})) * cos(radians(c.latitude)) *
+          power(sin(radians(c.longitude - ${lng}) / 2), 2)
+        )) as distance
+      FROM checkin c
+      LEFT JOIN driver d ON c.driver_id = d.id
+      LEFT JOIN "user" u ON d.user_id = u.id
+      WHERE c.active = true
+      ORDER BY distance
+    `);
   }
 }
 
