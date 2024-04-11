@@ -1,13 +1,16 @@
 import { Request, Response } from 'express';
 import { truckSchema } from '../schemas/truckSchemas';
+import { findTrucks } from '../useCases/truck/findTrucks';
 import { updateTruck } from '../useCases/truck/updateTruck';
 
 class TruckController {
+  async index(req: Request, res: Response) {
+    const trucks = await findTrucks();
+    return res.status(200).json(trucks);
+  }
+
   async update(req: Request, res: Response) {
     const { id } = req.params;
-    if (!req.userId) {
-      return res.sendStatus(500);
-    }
 
     const dataTruck = truckSchema.parse(req.body);
 
