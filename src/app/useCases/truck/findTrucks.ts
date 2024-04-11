@@ -1,7 +1,7 @@
-import { prisma } from '../../../libs/prisma';
+import TruckRepository from '../../repositories/TruckRepository';
 
 export async function findTrucks() {
-  const trucks = await prisma.truck.findMany();
+  const trucks = await TruckRepository.findMany();
 
   return trucks;
 }

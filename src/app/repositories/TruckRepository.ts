@@ -11,7 +11,9 @@ interface IUpdateArgs {
 }
 
 export class TruckRepository {
-  findMany() {}
+  findMany() {
+    return prisma.truck.findMany();
+  }
 
   async findFirst({ where }: IFindFirstArgs) {
     return await prisma.truck.findFirst({ where });
