@@ -86,6 +86,7 @@ router.put(
   LoadController.update,
 );
 router.get('/trucks', authentication, TruckController.index);
+router.post('/trucks', authentication, TruckController.store);
 router.put('/trucks/:id', authentication, TruckController.update);
 
 router.post('/authenticate/login', AuthenticationController.index);

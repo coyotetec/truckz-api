@@ -10,9 +10,38 @@ interface IUpdateArgs {
   data: Prisma.XOR<Prisma.TruckUpdateInput, Prisma.TruckUncheckedCreateInput>;
 }
 
+interface ICreateArgs {
+  renavam: string;
+  plate: string;
+  crvNumber: string;
+  model: string;
+  holderName?: string;
+  holderCpf?: string;
+  holderCnpj?: string;
+  type:
+    | 'bau'
+    | 'bau_frigorifico'
+    | 'sider'
+    | 'cacamba'
+    | 'grade_baixa'
+    | 'graneleiro'
+    | 'prancha';
+  axlesQty: number;
+  tracker: boolean;
+  driverId: string;
+}
+
 export class TruckRepository {
   findMany() {
     return prisma.truck.findMany();
+  }
+
+  create(truckData: ICreateArgs) {
+    return prisma.truck.create({
+      data: {
+        ...truckData,
+      },
+    });
   }
 
   async findFirst({ where }: IFindFirstArgs) {

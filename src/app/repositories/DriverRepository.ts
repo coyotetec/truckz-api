@@ -42,6 +42,14 @@ class DriverRepository {
     });
   }
 
+  findUnique(userId: string) {
+    return prisma.driver.findUnique({
+      where: {
+        userId,
+      },
+    });
+  }
+
   async findFirst({ where }: IFindFirstArgs) {
     return prisma.driver.findFirst({
       where,
