@@ -52,6 +52,14 @@ export class TruckRepository {
     return await prisma.truck.update({ where, data });
   }
 
+  delete(truckId: string) {
+    return prisma.truck.delete({
+      where: {
+        id: truckId,
+      },
+    });
+  }
+
   deleteDriverTrucks(driverId: string) {
     return prisma.truck.deleteMany({
       where: {

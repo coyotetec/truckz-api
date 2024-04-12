@@ -4,6 +4,7 @@ import { findTrucks } from '../useCases/truck/findTrucks';
 import { updateTruck } from '../useCases/truck/updateTruck';
 import { createTruck } from '../useCases/truck/createTruck';
 import { APPError } from '../errors/APPError';
+import { deleteTruck } from '../useCases/truck/deleteTruck';
 
 class TruckController {
   async index(req: Request, res: Response) {
@@ -35,6 +36,14 @@ class TruckController {
     const updatedTruck = await updateTruck(req.userId, id, dataTruck);
 
     return res.status(200).json(updatedTruck);
+  }
+
+  async destroy(req: Request, res: Response) {
+    const truckId = req.params.id;
+
+    await deleteTruck({ truckId, userId: req.userId });
+
+    return res.status(200).json({ message: 'Caminhão apagado' });
   }
 }
 
