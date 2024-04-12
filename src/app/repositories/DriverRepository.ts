@@ -56,6 +56,25 @@ class DriverRepository {
     });
   }
 
+  async findFirstWithTrucks(userId: string) {
+    return prisma.driver.findMany({
+      where: { userId },
+      select: {
+        id: true,
+        fullName: true,
+        birthDate: true,
+        cpf: true,
+        cnhNumber: true,
+        cnhCategory: true,
+        rntrc: true,
+        phoneNumber: true,
+        whatsappNumber: true,
+        userId: true,
+        truck: true,
+      },
+    });
+  }
+
   async update({ where, data }: IUpdateArgs) {
     return prisma.driver.update({
       where,
