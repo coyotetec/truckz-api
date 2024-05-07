@@ -6,6 +6,7 @@ const secretKey = process.env.MINIO_SECRET_KEY as string;
 
 export const minioClient = new Minio.Client({
   endPoint,
+  port: 9000,
   useSSL: false,
   accessKey,
   secretKey,
